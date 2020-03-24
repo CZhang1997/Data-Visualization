@@ -7,6 +7,6 @@ var svg = d3.select("body").append("svg")
 
             var newX = 300;
             svg.append("circle")
-                            .attr("cx","350")
-                            .attr("cy","350")
-                            .attr("r","300");
+                            .attr("cx","50%")
+                            .attr("cy","50%")
+                            .attr("r","380");
