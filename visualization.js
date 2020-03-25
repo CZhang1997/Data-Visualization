@@ -41,7 +41,7 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
 
 
     d3.csv("disease.csv")
-    .row(function(d){ return {disease: d.disease, rank: d.rank}; })
+    .row(function(d){ return {disease: String(d.disease), rank: d.rank}; })
     .get(function(error, data){
       console.log(data);
     })
