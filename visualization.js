@@ -1,12 +1,14 @@
 var dataArray = [5,11,18];
 var margin = {left:0, right: 50, top:0, bottom:0, center: "50%"};
 
-var mid_width = screen.width / 2;
-var mid_height = screen.height /2.4;
+var width = 1600;
+var height = 1000;
+var mid_width = width / 2;
+var mid_height = height /2.4;
 var radius = 250;
 var svg = d3.select("body").append("svg")
-            .attr("height","1000px")
-            .attr("width", "1600px");
+            .attr("height",height)
+            .attr("width", width);
 
 var template = svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
 
