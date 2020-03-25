@@ -9,7 +9,7 @@ var radius = 250;
 var svg = d3.select("body").append("svg")
             .attr("height",height)
             .attr("width", width);
-
+console.log("hello world");
 var template = svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
 
     template.append("circle")
@@ -38,3 +38,8 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
         .attr("y1", mid_height - radius)
         .attr("x2", mid_width)
         .attr("y2", mid_height + radius);
+
+
+    d3.csv("disease.csv").get(function(error, data){
+      console.log(data);
+    })
