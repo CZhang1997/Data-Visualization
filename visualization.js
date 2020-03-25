@@ -40,6 +40,8 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
         .attr("y2", mid_height + radius);
 
 
-    d3.csv("disease.csv").get(function(error, data){
-      console.log(data);
+    d3.csv("disease.csv")
+    .row(function(d){ return {disease: d.disease, rank: d.rank}; })
+    .get(function(error, data){
+      console.log(data.disease);
     })
