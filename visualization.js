@@ -9,7 +9,9 @@ var radius = 250;
 var svg = d3.select("body").append("svg")
             .attr("height",height)
             .attr("width", width);
-console.log("hello world 4");
+
+console.log("hello world 6");
+
 var template = svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
 
     template.append("circle")
@@ -43,5 +45,5 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
     d3.csv("disease.csv")
     .row(function(d){ return {disease: d.Disease, rank: d.rank}; })
     .get(function(error, data){
-      console.log(data);
+      console.log(data.disease);
     })
