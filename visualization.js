@@ -53,5 +53,5 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
     .row(function(d){ return {disease: d.Disease, rank: d.rank}; })
     .get(function(error, data){
       console.log(data);
-      console.log(data.disease);
+      console.log(data[1].disease);
     })
