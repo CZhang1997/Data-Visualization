@@ -6,18 +6,22 @@ var height = 1000;
 var mid_width = width / 2;
 var mid_height = height /2.4;
 var radius = 250;
+
+// Create an svg container
 var svg = d3.select("body").append("svg")
             .attr("height",height)
             .attr("width", width);
 console.log("hello world 4");
 var template = svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
 
+    // The outter circle
     template.append("circle")
         .attr("cx",mid_width)
         .attr("cy",mid_height)
         .attr("fill", "#cdc1c5")
         .attr("r",radius + 50);
 
+    // The inner circle
     template.append("circle")
           .attr("cx",mid_width)
           .attr("cy",mid_height)
@@ -25,15 +29,15 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
           .attr("r", radius);
 
     template.append("line")
-      .attr("stroke-width", "2")
-      .attr("stroke", "blue")
+      .attr("stroke-width", "1")
+      .attr("stroke", "Green")
       .attr("x1", mid_width - radius)
       .attr("y1", mid_height)
       .attr("x2", mid_width + radius)
       .attr("y2", mid_height);
     template.append("line")
-        .attr("stroke-width", "2")
-        .attr("stroke", "blue")
+        .attr("stroke-width", "1")
+        .attr("stroke", "Red")
         .attr("x1", mid_width)
         .attr("y1", mid_height - radius)
         .attr("x2", mid_width)
