@@ -12,7 +12,7 @@ var svg = d3.select("body").append("svg")
             .attr("height",height)
             .attr("width", width);
 
-console.log("hello world! 3");
+console.log("hello world! 4");
 
 var template = svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
 
@@ -53,4 +53,5 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
     .row(function(d){ return {disease: d.Disease, rank: d.rank}; })
     .get(function(error, data){
       console.log(data);
+      console.log(data.disease);
     })
