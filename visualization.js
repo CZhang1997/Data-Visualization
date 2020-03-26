@@ -12,7 +12,7 @@ var svg = d3.select("body").append("svg")
             .attr("height",height)
             .attr("width", width);
 
-console.log("hello world 6");
+console.log("hello world!");
 
 var template = svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
 
@@ -30,6 +30,7 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
           .attr("fill", "white")
           .attr("r", radius);
 
+    // horizontal line
     template.append("line")
       .attr("stroke-width", "1")
       .attr("stroke", "Green")
@@ -37,6 +38,8 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
       .attr("y1", mid_height)
       .attr("x2", mid_width + radius)
       .attr("y2", mid_height);
+
+    // veritical line
     template.append("line")
         .attr("stroke-width", "1")
         .attr("stroke", "Red")
