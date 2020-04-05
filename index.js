@@ -14,9 +14,14 @@ const svg = contents.append("svg")
             .attr("height",width)
             .attr("width", height);
 
-
+// Get the data from Firebase "food" collection
 db.collection('food').get().then(res => {
-    console.log(res)
+    var data = [];
+    res.docs.forEach(doc => {
+      data.push(doc.data());
+    });
+
+    console.log(data);
 });
             
 
