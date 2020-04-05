@@ -1,17 +1,24 @@
+const contents = d3.select(".contents");
+
 var dataArray = [5,11,18];
 var margin = {left:0, right: 50, top:0, bottom:0, center: "50%"};
 
-var width = window.screen.width;
-var height = window.screen.width;
+var width = screen.width;
+var height = screen.height;
 var mid_width = width / 2;
 var mid_height = height /2.4;
 var radius = 250;
 
 // Create an svg container
-var svg = d3.select("body").append("svg")
+const svg = contents.append("svg")
             .attr("height",width)
             .attr("width", height);
-   
+
+
+db.collection('food').get().then(res => {
+    console.log(res)
+});
+            
 
 // Contained in one group
 var template = svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
@@ -48,9 +55,3 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
         .attr("x2", mid_width)
         .attr("y2", mid_height + radius);
 
-
-    d3.csv("disease.csv")
-    .row(function(d){ return {disease: d.Disease, rank: d.rank}; })
-    .get(function(error, data){
-      console.log(data);
-    })

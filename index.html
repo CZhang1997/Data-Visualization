@@ -2,15 +2,48 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Data Visualization</title>
+		<title>Food Chart Visualization</title>
 		<link rel="stylesheet" type="text/css" href="style.css" >
-		<script type="text/javascript" src="d3.v4.js"></script>
+		<!-- Compiled and minified CSS -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 	</head>
 
-	<body>
-		<!-- <script src="https://d3js.org/d3.v5.js"></script> -->
+	<body class = "#ffebee red lighten-5">
+		<header class="#ffebee red lighten-4 section">
+			<h2 class="center white-text">Food Chart Visualization</h2>
+		</header>
+		
 
-		<script type="text/javascript" src="visualization.js"></script>
+ 
+		<!-- <script src="https://d3js.org/d3.v5.js"></script> -->
+		<div class="contents"></div>
+		<!-- Compiled and minified JavaScript -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+		
+		<!-- The core Firebase JS SDK is always required and must be listed first -->
+		<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-firestore.js"></script>
+
+		<script>
+		// Your web app's Firebase configuration
+		var firebaseConfig = {
+		apiKey: "AIzaSyDNa3IRs4pZ2YR34fIaa1D4WjLofXJdEEE",
+		authDomain: "food-visualization.firebaseapp.com",
+		databaseURL: "https://food-visualization.firebaseio.com",
+		projectId: "food-visualization",
+		storageBucket: "food-visualization.appspot.com",
+		messagingSenderId: "535217287617",
+		appId: "1:535217287617:web:f8a0ae33d0baf763bbff40",
+		measurementId: "G-13TB52V245"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+		const db = firebase.firestore();
+		//db.settings({timestampsInSnapshots: true});
+		</script>
+
+		<script src="https://d3js.org/d3.v5.js"></script>
+		<script type="text/javascript" src="index.js"></script>
 
 		
   </body>
