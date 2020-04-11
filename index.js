@@ -1,27 +1,47 @@
-var dataArray = [5,11,18];
-var margin = {left:0, right: 50, top:0, bottom:0, center: "50%"};
+const contents = d3.select(".contents");
 
-var width = window.screen.width;
-var height = window.screen.width;
+var dataArray = [5,11,18];
+
+// Create margins and dimensionss
+const margin = {left:100, right: 20, top:20, bottom:100, center: "50%"};
+const graphWidth = 600 - margin.left - margin.right;
+const graphHeight = 600 - margin.top - margin.bottom;
+
+var width = 600; //screen.height
+var height = 600;
 var mid_width = width / 2;
 var mid_height = height /2.4;
 var radius = 250;
+const gap = 50; // difference of outer and inner circles' radius
 
 // Create an svg container
-var svg = d3.select("body").append("svg")
+const svg = contents.append("svg")
             .attr("height",width)
             .attr("width", height);
-   
+
+
+
+// Get the data from Firebase "food" collection
+db.collection('food').get().then(res => {
+    var data = [];
+    res.docs.forEach(doc => {
+      data.push(doc.data()); // All the info stores into the data variable
+    });
+});
+            
 
 // Contained in one group
-var template = svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
+const template = svg.append("g")
+    .attr('width', graphWidth)
+    .attr('height', graphHeight)
+    .attr("transform","translate("+0+","+gap+")");
 
     // The outter circle
     template.append("circle")
         .attr("cx", mid_width)
         .attr("cy", mid_height)
         .attr("fill", "#cdc1c5")
-        .attr("r",radius + 50);
+        .attr("r",radius + gap);
 
     // The inner circle
     template.append("circle")
@@ -31,7 +51,6 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
           .attr("r", radius);
 
     // X-axis, representing healthy
-    // horizontal line
     template.append("line")
       .attr("stroke-width", "1")
       .attr("stroke", "Green")
@@ -41,7 +60,6 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
       .attr("y2", mid_height);
 
     // Y-axis, representing calorie
-    // veritical line
     template.append("line")
         .attr("stroke-width", "1")
         .attr("stroke", "Red")
@@ -50,10 +68,3 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
         .attr("x2", mid_width)
         .attr("y2", mid_height + radius);
 
-
-    d3.csv("data/disease.csv")
-    .row(function(d){ return {disease: d.Disease, rank: d.rank}; })
-    .get(function(error, data){
-      console.log(data);
-      console.log(data[1].disease);
-    })
