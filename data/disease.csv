@@ -1,4 +1,5 @@
-Diabete
-Low Blood Pressure
-Heart Disease
-High
+Disease,rank
+Diabete,1
+Low Blood Pressure,2
+Heart Disease,3
+High,4

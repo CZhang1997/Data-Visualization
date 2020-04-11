@@ -31,6 +31,7 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
           .attr("r", radius);
 
     // X-axis, representing healthy
+    // horizontal line
     template.append("line")
       .attr("stroke-width", "1")
       .attr("stroke", "Green")
@@ -40,6 +41,7 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
       .attr("y2", mid_height);
 
     // Y-axis, representing calorie
+    // veritical line
     template.append("line")
         .attr("stroke-width", "1")
         .attr("stroke", "Red")
@@ -49,8 +51,9 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
         .attr("y2", mid_height + radius);
 
 
-    d3.csv("disease.csv")
+    d3.csv("data/disease.csv")
     .row(function(d){ return {disease: d.Disease, rank: d.rank}; })
     .get(function(error, data){
       console.log(data);
+      console.log(data[1].disease);
     })
