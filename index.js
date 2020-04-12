@@ -26,9 +26,10 @@ db.collection('food').get().then(res => {
     var data = [];
     res.docs.forEach(doc => {
       data.push(doc.data()); // All the info stores into the data variable
+      console.log(doc.data()["name"]);
     });
 });
-            
+
 
 // Contained in one group
 const template = svg.append("g")
@@ -67,4 +68,3 @@ const template = svg.append("g")
         .attr("y1", mid_height - radius)
         .attr("x2", mid_width)
         .attr("y2", mid_height + radius);
-
