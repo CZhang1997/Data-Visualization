@@ -65,28 +65,35 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
         var data = [];
         res.docs.forEach(doc => {
           data.push(doc.data()); // All the info stores into the data variable
-          console.log(doc.data()["name"]);
+          //console.log(doc.data()["name"]);
         });
+        // get the data length
         var dataSize = data.length;
-        var degreePerData = 90.0 / dataSize;
-        var i;
-        var colors = ["black", "yellow", "blue", "green"]
-        var space = 5;
-        for(i = 0; i < dataSize; i++)
-        {
-          var degrees = i * degreePerData;
+        // find the degree per each data point, -1 such that last data point stuck at 90 degree
+        var degreePerData = 90.0 / (dataSize - 1);
+        var i; // loop counter
+        var space = 5;  // space add to the point, so not overlap with inner circle
 
-          var yLength = Math.abs(Math.sin(degrees) * radius);
-          var xLength = Math.abs(Math.cos(degrees) * radius);
-          console.log("degrees at " + degrees + " x at " + xLength + " y at " + yLength);
+        for(i = 0; i < dataSize; i++) // loop through each data point
+        {
+          var degrees = i * degreePerData;  // find the degree that represent this data point
+          var yLength = Math.abs(Math.sin(degrees * Math.PI / 180) * radius); // use sin to find the y change sin(radian)
+          var xLength = Math.abs(Math.cos(degrees * Math.PI / 180) * radius); // use cos to find the x change
+          //console.log("degrees at " + degrees + " x at " + xLength + " y at " + yLength);
+          // add a small circle that represent this data
           template.append("circle")
-                .attr("cx",space + mid_width + xLength)
+                .attr("class", "food_name")
+                .attr("cx",mid_width + xLength + space)
                 .attr("cy",mid_height  - yLength - space)
                 .attr("fill", colorArray[i])
                 .attr("r", 5);
+          // add the name of this data point to the graph
           template.append("text")
+                .attr("class", "food_name")
                 .attr("x", mid_width + xLength + space *2)
                 .attr("y", mid_height  - yLength  - 2*space)
+                .style("text-anchor", "start")
+              //  .attr("transform", "translate(10,50) rotate("+ (90 - degrees)+")")
                 .text(data[i]["name"])
                 .attr("font-family", "sans-serif")
                 .attr("font-size", "20px")
