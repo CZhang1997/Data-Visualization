@@ -1,8 +1,19 @@
 const contents = d3.select(".contents");
 var margin = {left:0, right: 50, top:0, bottom:0, center: "50%"};
 
-var width = window.screen.width;
-var height = window.screen.width;
+var colorArray = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
+		  '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+		  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A',
+		  '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+		  '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC',
+		  '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+		  '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680',
+		  '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+		  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
+		  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
+
+var width = 1000;// window.screen.width;
+var height = 1000; //window.screen.width;
 var mid_width = width / 2;
 var mid_height = height /2.4;
 var radius = 250;
@@ -11,7 +22,6 @@ var radius = 250;
 var svg = d3.select("body").append("svg")
             .attr("height",width)
             .attr("width", height);
-
 
 // Contained in one group
 var template = svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
@@ -58,7 +68,7 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
           console.log(doc.data()["name"]);
         });
         var dataSize = data.length;
-        var degreePerData = 90 / dataSize;
+        var degreePerData = 90.0 / dataSize;
         var i;
         var colors = ["black", "yellow", "blue", "green"]
         var space = 5;
@@ -72,7 +82,7 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
           template.append("circle")
                 .attr("cx",space + mid_width + xLength)
                 .attr("cy",mid_height  - yLength - space)
-                .attr("fill", colors[i])
+                .attr("fill", colorArray[i])
                 .attr("r", 5);
           template.append("text")
                 .attr("x", mid_width + xLength + space *2)
@@ -80,6 +90,6 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
                 .text(data[i]["name"])
                 .attr("font-family", "sans-serif")
                 .attr("font-size", "20px")
-                .attr("fill", "red");
+                .attr("fill", colorArray[i]);
         }
     });
