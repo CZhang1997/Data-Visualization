@@ -12,6 +12,15 @@ var colorArray = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
 		  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
 		  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
 
+
+// Map: different color corresponding to food type
+let typeColorMap = new Map();
+typeColorMap.set('meat', '#3352FF');
+typeColorMap.set('dairy', '#DD33FF');
+typeColorMap.set('fruit', '#ACFF33');
+typeColorMap.set('vegetable', '#106F1C');
+typeColorMap.set('grain', '#EAD11A');
+
 var width = 1000;// window.screen.width;
 var height = 1000; //window.screen.width;
 var mid_width = width / 2;
@@ -72,7 +81,7 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
         // find the degree per each data point, -1 such that last data point stuck at 90 degree
         var degreePerData = 90.0 / (dataSize - 1);
         var i; // loop counter
-        var space = 5;  // space add to the point, so not overlap with inner circle
+        var space = 2;  // space add to the point, so not overlap with inner circle
 
         for(i = 0; i < dataSize; i++) // loop through each data point
         {
@@ -80,13 +89,15 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
           var yLength = Math.abs(Math.sin(degrees * Math.PI / 180) * radius); // use sin to find the y change sin(radian)
           var xLength = Math.abs(Math.cos(degrees * Math.PI / 180) * radius); // use cos to find the x change
           //console.log("degrees at " + degrees + " x at " + xLength + " y at " + yLength);
-          // add a small circle that represent this data
+          
+          // add a small dot that represent this data
           template.append("circle")
                 .attr("class", "food_name")
                 .attr("cx",mid_width + xLength + space)
                 .attr("cy",mid_height  - yLength - space)
-                .attr("fill", colorArray[i])
-                .attr("r", 5);
+                .attr("fill", typeColorMap.get(data[i]["type"])) // dot color
+                .attr("r", 2); // dot size
+          
           // add the name of this data point to the graph
           template.append("text")
                 .attr("class", "food_name")
@@ -94,9 +105,13 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
                 .attr("y", mid_height  - yLength  - 2*space)
                 .style("text-anchor", "start")
               //  .attr("transform", "translate(10,50) rotate("+ (90 - degrees)+")")
-                .text(data[i]["name"])
-                .attr("font-family", "sans-serif")
-                .attr("font-size", "20px")
-                .attr("fill", colorArray[i]);
+                .text(data[i]["name"]) // text
+                .attr("font-family", "Courier New") // text font styple
+                .attr("font-size", "10px") // text font size
+                .attr("fill", typeColorMap.get(data[i]["type"])) // text Color
         }
     });
+
+
+
+
