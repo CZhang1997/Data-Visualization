@@ -1,125 +1,123 @@
 [
     {
-        "name": "nbv.bv-commons",
-        "size": 1000,
+        "name": "ingredient.chicken",
+        "type": "meat",
         "imports": []
     },
     {
-        "name": "nbv.cs-commons.cs-navigation",
-        "size": 230,
+        "name": "ingredient.beef",
+        "type": "meat",
         "imports": []
     },
     {
-        "name": "nbv.cs-commons.users-lookup",
-        "size": 230,
+        "name": "ingredient.fish",
+        "type": "meat",
         "imports": []
     },
     {
-        "name": "nbv.meetx-components.custom-card-component",
-        "size": 20,
-        "imports": [
-            "nbv.bv-commons"
-        ]
-    },
+        "name": "ingredient.egg",
+        "type": "meat",
+        "imports": []
+    }, 
+
+
     {
-        "name": "nbv.meetx-components.meeting-card-component",
-        "size": 50,
-        "imports": [
-            "nbv.bv-commons"
-        ]
-    },
-    {
-        "name": "nbv.meetx-components.calendar-card-component",
-        "size": 100,
-        "imports": [
-            "nbv.bv-commons"
-        ]
-    },
-    {
-        "name": "nbv.meetx-components.new-items-card-component",
-        "size": 150,
-        "imports": [
-            "nbv.bv-commons"
-        ]
-    },
-    {
-        "name": "nbv.meetx-components.meeting-component",
-        "size": 200,
-        "imports": [
-            "nbv.bv-commons"
-        ]
-    },
-    {
-        "name": "nbv.meetx-components.tgi-card-component",
-        "size": 200,
-        "imports": [
-            "nbv.bv-commons"
-        ]
-    },
-    {
-        "name": "nbv.meetx-components.dashboard-component-v2",
-        "size": 300,
-        "imports": [
-            "nbv.bv-commons",
-            "nbv.meetx-components.calendar-card-component",
-            "nbv.meetx-components.custom-card-component",
-            "nbv.meetx-components.meeting-card-component",
-            "nbv.meetx-components.new-items-card-component",
-            "nbv.meetx-components.tgi-card-component"
-        ]
-    },
-    {
-        "name": "nbv.meetx-components.meetings-creation-component",
-        "size": 400,
-        "imports": [
-            "nbv.bv-commons",
-            "nbv.cs-commons.cs-navigation"
-        ]
-    },
-    {
-        "name": "nbv.meetx-components.directory-component",
-        "size": 200,
+        "name": "ingredient.lettuce",
+        "type": "vegetable",
         "imports": []
     },
     {
-        "name": "nbv.inbox.inbox-ui",
-        "size": 200,
-        "imports": [
-            "nbv.cs-commons.cs-navigation",
-            "nbv.cs-commons.users-lookup"
-        ]
-    },
+        "name": "ingredient.tomato",
+        "type": "vegetable",
+        "imports": []
+    },  
     {
-        "name": "nbv.meetx-components.directory-component",
-        "size": 200,
+        "name": "ingredient.carrot",
+        "type": "vegetable",
+        "imports": []
+    }, 
+    {
+        "name": "ingredient.green onion",
+        "type": "vegetable",
+        "imports": []
+    }, 
+    {
+        "name": "ingredient.pea",
+        "type": "vegetable",
+        "imports": []
+    }, 
+
+
+
+    {
+        "name": "ingredient.white rice",
+        "type": "grain",
         "imports": []
     },
+
+
+
     {
-        "name": "nbv.task-management.task-ui",
-        "size": 230,
+        "name": "ingredient.American cheese",
+        "type": "diary",
+        "imports": []
+    },
+    
+
+
+    {
+        "name": "ingredient.soy sause",
+        "type": "sause",
+        "imports": []
+    },
+
+
+
+
+
+    {
+        "name": "ingredient.item.Big Mac",
         "imports": [
-            "nbv.cs-commons.users-lookup",
-            "nbv.cs-commons.cs-navigation"
+            "ingredient.beef",
+            "ingredient.lettuce",
+            "ingredient.American cheese"
+           
         ]
     },
+
     {
-        "name": "nbv.meetx-components.components",
-        "size": 200,
+        "name": "ingredient.item.fried rice",
         "imports": [
-            "nbv.cs-commons.cs-navigation",
-            "nbv.cs-commons.users-lookup",
-            "nbv.meetx-components.calendar-card-component",
-            "nbv.meetx-components.custom-card-component",
-            "nbv.meetx-components.new-items-card-component"
+            "ingredient.white rice",
+            "ingredient.soy sause",
+            "ingredient.egg",
+            "ingredient.pea",
+            "ingredient.carrot",
+            "ingredient.green onion"
+           
         ]
     },
+
+
+
+
+
     {
-        "name": "nbv.meetxhtmlclient",
-        "size": 200,
+        "name": "ingredient.item.type.fast food",
         "imports": [
-            "nbv.meetx-components.components"
+            "ingredient.item.Big Mac"
+           
+           
         ]
-        
+    },
+
+    {
+        "name": "ingredient.item.type.Chinese food",
+        "imports": [
+            "ingredient.item.fried rice"
+           
+           
+        ]
     }
 
 ]
