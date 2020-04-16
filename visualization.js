@@ -40,7 +40,7 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
         .attr("cx", mid_width)
         .attr("cy", mid_height)
         .attr("fill", "#cdc1c5")
-        .attr("r",radius + 50);
+        .attr("r",radius + 70);
 
     // The inner circle
     template.append("circle")
@@ -79,22 +79,22 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
         // get the data length
         var dataSize = data.length;
         // find the degree per each data point, -1 such that last data point stuck at 90 degree
-        var degreePerData = 90.0 / (dataSize - 1);
+        var degreePerData = 360.0 / (dataSize);
         var i; // loop counter
         var space = 2;  // space add to the point, so not overlap with inner circle
 
         for(i = 0; i < dataSize; i++) // loop through each data point
         {
           var degrees = i * degreePerData;  // find the degree that represent this data point
-          var yLength = Math.abs(Math.sin(degrees * Math.PI / 180) * radius); // use sin to find the y change sin(radian)
-          var xLength = Math.abs(Math.cos(degrees * Math.PI / 180) * radius); // use cos to find the x change
+          var yLength = Math.sin(degrees * Math.PI / 180) * radius; // use sin to find the y change sin(radian)
+          var xLength = Math.cos(degrees * Math.PI / 180) * radius; // use cos to find the x change
           //console.log("degrees at " + degrees + " x at " + xLength + " y at " + yLength);
           
           // add a small dot that represent this data
           template.append("circle")
                 .attr("class", "food_name")
-                .attr("cx",mid_width + xLength + space)
-                .attr("cy",mid_height  - yLength - space)
+                .attr("cx", mid_width + xLength)
+                .attr("cy", mid_height - yLength)
                 .attr("fill", typeColorMap.get(data[i]["type"])) // dot color
                 .attr("r", 2); // dot size
           
