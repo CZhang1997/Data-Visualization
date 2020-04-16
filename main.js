@@ -20,136 +20,7 @@ tree = d3.cluster()
     
 
 d3.json("data/data.json").then(function(da) { // this cover all code below
-  //return dat;
-//});
-console.log(da)
-/*
-[
-  {
-      "name": "nbv.bv-commons",
-      "size": 1000,
-      "imports": []
-  },
-  {
-      "name": "nbv.cs-commons.cs-navigation",
-      "size": 230,
-      "imports": []
-  },
-  {
-      "name": "nbv.cs-commons.users-lookup",
-      "size": 230,
-      "imports": []
-  },
-  {
-      "name": "nbv.meetx-components.custom-card-component",
-      "size": 20,
-      "imports": [
-          "nbv.bv-commons"
-      ]
-  },
-  {
-      "name": "nbv.meetx-components.meeting-card-component",
-      "size": 50,
-      "imports": [
-          "nbv.bv-commons"
-      ]
-  },
-  {
-      "name": "nbv.meetx-components.calendar-card-component",
-      "size": 100,
-      "imports": [
-          "nbv.bv-commons"
-      ]
-  },
-  {
-      "name": "nbv.meetx-components.new-items-card-component",
-      "size": 150,
-      "imports": [
-          "nbv.bv-commons"
-      ]
-  },
-  {
-      "name": "nbv.meetx-components.meeting-component",
-      "size": 200,
-      "imports": [
-          "nbv.bv-commons"
-      ]
-  },
-  {
-      "name": "nbv.meetx-components.tgi-card-component",
-      "size": 200,
-      "imports": [
-          "nbv.bv-commons"
-      ]
-  },
-  {
-      "name": "nbv.meetx-components.dashboard-component-v2",
-      "size": 300,
-      "imports": [
-          "nbv.bv-commons",
-          "nbv.meetx-components.calendar-card-component",
-          "nbv.meetx-components.custom-card-component",
-          "nbv.meetx-components.meeting-card-component",
-          "nbv.meetx-components.new-items-card-component",
-          "nbv.meetx-components.tgi-card-component"
-      ]
-  },
-  {
-      "name": "nbv.meetx-components.meetings-creation-component",
-      "size": 400,
-      "imports": [
-          "nbv.bv-commons",
-          "nbv.cs-commons.cs-navigation"
-      ]
-  },
-  {
-      "name": "nbv.meetx-components.directory-component",
-      "size": 200,
-      "imports": []
-  },
-  {
-      "name": "nbv.inbox.inbox-ui",
-      "size": 200,
-      "imports": [
-          "nbv.cs-commons.cs-navigation",
-          "nbv.cs-commons.users-lookup"
-      ]
-  },
-  {
-      "name": "nbv.meetx-components.directory-component",
-      "size": 200,
-      "imports": []
-  },
-  {
-      "name": "nbv.task-management.task-ui",
-      "size": 230,
-      "imports": [
-          "nbv.cs-commons.users-lookup",
-          "nbv.cs-commons.cs-navigation"
-      ]
-  },
-  {
-      "name": "nbv.meetx-components.components",
-      "size": 200,
-      "imports": [
-          "nbv.cs-commons.cs-navigation",
-          "nbv.cs-commons.users-lookup",
-          "nbv.meetx-components.calendar-card-component",
-          "nbv.meetx-components.custom-card-component",
-          "nbv.meetx-components.new-items-card-component"
-      ]
-  },
-  {
-      "name": "nbv.meetxhtmlclient",
-      "size": 200,
-      "imports": [
-          "nbv.meetx-components.components"
-      ]
-      
-  }
-
-]
-      */
+ 
 data = hierarchy(da)
 const root = tree(bilink(d3.hierarchy(data)
 .sort((a, b) => d3.ascending(a.height, b.height) || d3.ascending(a.data.name, b.data.name))));
@@ -160,7 +31,7 @@ const svg = d3.select("body").append("svg")
       .attr("width", width)
       .attr("height", height)
       .attr("transform","translate("+margin.left+","+margin.top+")")
-      .attr("viewBox", [-width / 2, -width / 2, width, width]);
+      .attr("viewBox", [-width / 2 - 200, -width / 2 - 100, width + 200, width + 200]);
 
   const node = svg.append("g")
       .attr("font-family", "sans-serif")
@@ -191,6 +62,32 @@ const svg = d3.select("body").append("svg")
       .style("mix-blend-mode", "multiply")
       .attr("d", ([i, o]) => line(i.path(o)))
       .each(function(d) { d.path = this; });
+/*
+      var width = 1000;// window.screen.width;
+var height = 1000; //window.screen.width;
+var mid_width = width / 2;
+var mid_height = height /2.4;
+var radius = 250;
+  const template = svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
+    template.append("line")
+  .attr("stroke-width", "1")
+  .attr("stroke", "Green")
+  .attr("x1", mid_width - radius)
+  .attr("y1", mid_height)
+  .attr("x2", mid_width + radius)
+  .attr("y2", mid_height);
+
+// Y-axis, representing calorie
+// veritical line
+    template.append("line")
+    .attr("stroke-width", "1")
+    .attr("stroke", "Red")
+    .attr("x1", mid_width)
+    .attr("y1", mid_height - radius)
+    .attr("x2", mid_width)
+    .attr("y2", mid_height + radius);       
+
+*/
 
   function overed(d) {
     link.style("mix-blend-mode", null);
