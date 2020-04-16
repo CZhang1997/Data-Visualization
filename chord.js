@@ -56,7 +56,7 @@ var group = svg
 .data(function(d) { return d.groups; })
 .enter()
 
-// add the group arcs on the outer part of the circle
+// add the group af the circlercs on the outer part o
 group.append("g")
   .append("path")
   .style("fill", "grey")
