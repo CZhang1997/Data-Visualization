@@ -51,12 +51,12 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
 				.attr("cx",function(d, i) {
 					var degrees = i * degreePerData;
 				var xLength = Math.cos(degrees * Math.PI / 180) * radius;
-				return mid_width + xLength + space;
+				return mid_width + xLength;
 			 	})
 				.attr("cy",function(d, i) {
 					var degrees = i * degreePerData;
 					var yLength = Math.sin(degrees * Math.PI / 180) * radius;
-					return mid_height  - yLength - space;
+					return mid_height  - yLength;
 				})
 				.attr("fill", function(d, i){return colorArray[i];})
 				.attr("r", 5)
@@ -70,12 +70,12 @@ var template = svg.append("g").attr("transform","translate("+margin.left+","+mar
 							.attr("x",function(d, i) {
 								var degrees = i * degreePerData;
 							var xLength = Math.cos(degrees * Math.PI / 180) * radius;
-							return mid_width + xLength + 2*space;
+							return mid_width + xLength + space;
 						 	})
 							.attr("y", function(d, i) {
 								var degrees = i * degreePerData;
 								var yLength = Math.sin(degrees * Math.PI / 180) * radius;
-								return mid_height  - yLength - 2*space;
+								return mid_height  - yLength - space;
 							})
 							.style("text-anchor", "start")
 							.text(function(d,i) {
