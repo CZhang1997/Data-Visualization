@@ -37,8 +37,8 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     const svg = d3.select("body").append("svg")
       .attr("width", width)
       .attr("height", height)
-      .attr("transform","translate("+margin.left+","+margin.top+")")
-      .attr("viewBox", [-width / 2 - 200, -width / 2 , width + 200, width]);
+      //.attr("transform","translate("+margin.left+","+margin.top+")")
+      .attr("viewBox", [-width / 2, -width / 2 , width, width]);
 
 
 
