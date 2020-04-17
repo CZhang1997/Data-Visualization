@@ -1,49 +1,167 @@
 [
     {
-        "name": "ingredient.chicken",
-        "type": "meat",
+        "name": "ingredient.chicken-breast",
+        "group": "meat",
+        "calories": 165,
+        "fat": 3.6,
+        "carbohydrates": 0,
+        "sodium": 74,
+        "portein": 31,
+        "imports": []
+    },
+    {
+        "name": "ingredient.chicken-thigh",
+        "group": "meat",
+        "calories": 206,
+        "fat": 10,
+        "carbohydrates": 0,
+        "sodium": 101,
+        "portein": 28,
+        "imports": []
+    },
+    {
+        "name": "ingredient.chicken-wing",
+        "group": "meat",
+        "calories": 109,
+        "fat": 8,
+        "carbohydrates": 0,
+        "sodium": 36,
+        "portein": 9,
         "imports": []
     },
     {
         "name": "ingredient.beef",
-        "type": "meat",
+        "group": "meat",
+        "calories": 100,
+        "fat": 9,
+        "carbohydrates": 1,
+        "sodium": 3,
+        "portein": 2,
         "imports": []
     },
     {
-        "name": "ingredient.fish",
-        "type": "meat",
+        "name": "ingredient.beef-ground",
+        "group": "meat",
+        "calories": 218,
+        "fat": 13,
+        "carbohydrates": 0,
+        "sodium": 76,
+        "portein": 24,
+        "imports": []
+    },
+    {
+        "name": "ingredient.pork-belly",
+        "group": "meat",
+        "calories": 259,
+        "fat": 26.5,
+        "carbohydrates": 0,
+        "sodium": 16,
+        "portein": 4.7,
+        "imports": []
+    },
+    {
+        "name": "ingredient.salmon",
+        "group": "meat",
+        "calories": 121,
+        "fat": 5.4,
+        "carbohydrates": 0,
+        "sodium": 37.4,
+        "portein": 17,
         "imports": []
     },
     {
         "name": "ingredient.egg",
-        "type": "meat",
+        "group": "meat",
+        "calories": 100,
+        "fat": 9,
+        "carbohydrates": 1,
+        "sodium": 3,
+        "portein": 2,
         "imports": []
     }, 
 
 
     {
         "name": "ingredient.lettuce",
-        "type": "vegetable",
+        "group": "vegetable",
+        "calories": 100,
+        "fat": 9,
+        "carbohydrates": 1,
+        "sodium": 3,
+        "portein": 2,
         "imports": []
     },
     {
         "name": "ingredient.tomato",
-        "type": "vegetable",
+        "group": "vegetable",
+        "calories": 100,
+        "fat": 9,
+        "carbohydrates": 1,
+        "sodium": 3,
+        "portein": 2,
         "imports": []
     },  
     {
         "name": "ingredient.carrot",
-        "type": "vegetable",
+        "group": "vegetable",
+        "calories": 100,
+        "fat": 9,
+        "carbohydrates": 1,
+        "sodium": 3,
+        "portein": 2,
         "imports": []
     }, 
     {
         "name": "ingredient.green onion",
-        "type": "vegetable",
+        "group": "vegetable",
+        "calories": 100,
+        "fat": 9,
+        "carbohydrates": 1,
+        "sodium": 3,
+        "portein": 2,
         "imports": []
     }, 
     {
+        "name": "ingredient.potato",
+        "group": "vegetable",
+        "calories": 168,
+        "fat": 0,
+        "carbohydrates": 37,
+        "sodium": 24,
+        "portein": 5,
+        "imports": []
+    }, 
+    {
+        "name": "ingredient.onion",
+        "group": "vegetable",
+        "calories": 40,
+        "fat": 0.1,
+        "carbohydrates": 9.3,
+        "sodium": 4,
+        "portein": 1.2,
+        "imports": []
+    }, 
+
+
+
+    {
         "name": "ingredient.pea",
-        "type": "vegetable",
+        "group": "legumes",
+        "calories": 100,
+        "fat": 9,
+        "carbohydrates": 1,
+        "sodium": 3,
+        "portein": 2,
+        "imports": []
+    }, 
+    {
+        "name": "ingredient.peanut",
+        "group": "legumes",
+        "calories": 161,
+        "fat": 14,
+        "carbohydrates": 4.6,
+        "sodium": 5,
+        "portein": 7,
         "imports": []
     }, 
 
@@ -51,15 +169,105 @@
 
     {
         "name": "ingredient.white rice",
-        "type": "grain",
+        "group": "grain",
+        "calories": 100,
+        "fat": 0,
+        "carbohydrates": 22,
+        "sodium": 450,
+        "portein": 5,
+        "imports": []
+    },
+    {
+        "name": "ingredient.sushi rice",
+        "group": "grain",
+        "calories": 298,
+        "fat": 0.4,
+        "carbohydrates": 65.9,
+        "sodium": 703,
+        "portein": 5.2,
+        "imports": []
+    },
+    {
+        "name": "ingredient.bun",
+        "group": "grain",
+        "calories": 140,
+        "fat": 1.5,
+        "carbohydrates": 26,
+        "sodium": 240,
+        "portein": 4,
+        "imports": []
+    },
+    {
+        "name": "ingredient.pizza crust",
+        "group": "grain",
+        "calories": 130,
+        "fat": 1.5,
+        "carbohydrates": 24,
+        "sodium": 240,
+        "portein": 4,
+        "imports": []
+    },
+    {
+        "name": "ingredient.spaghetti",
+        "group": "grain",
+        "calories": 221,
+        "fat": 1.3,
+        "carbohydrates": 43.2,
+        "sodium": 1,
+        "portein": 8.1,
+        "imports": []
+    },
+    {
+        "name": "ingredient.ramen noodles",
+        "group": "grain",
+        "calories": 188,
+        "fat": 7,
+        "carbohydrates": 27,
+        "sodium": 891,
+        "portein": 5,
+        "imports": []
+    },
+    {
+        "name": "ingredient.corn tortillas",
+        "group": "grain",
+        "calories": 52,
+        "fat": 0.7,
+        "carbohydrates": 10.7,
+        "sodium": 11,
+        "portein": 1.4,
         "imports": []
     },
 
 
 
     {
-        "name": "ingredient.American cheese",
-        "type": "dairy",
+        "name": "ingredient.cheese-America",
+        "group": "dairy",
+        "calories": 100,
+        "fat": 9,
+        "carbohydrates": 1,
+        "sodium": 3,
+        "portein": 2,
+        "imports": []
+    },
+    {
+        "name": "ingredient.cheese-Mozzarella",
+        "group": "dairy",
+        "calories": 85,
+        "fat": 6,
+        "carbohydrates": 1,
+        "sodium": 176,
+        "portein": 6,
+        "imports": []
+    },
+    {
+        "name": "ingredient.cheese-cheddar",
+        "group": "dairy",
+        "calories": 68,
+        "fat": 5.6,
+        "carbohydrates": 0.2,
+        "sodium": 106,
+        "portein": 4.2,
         "imports": []
     },
     
@@ -67,7 +275,42 @@
 
     {
         "name": "ingredient.soy sause",
-        "type": "sause",
+        "group": "sause",
+        "calories": 8,
+        "fat": 0,
+        "carbohydrates": 1,
+        "sodium": 902,
+        "portein": 1,
+        "imports": []
+    },
+    {
+        "name": "ingredient.hoisin sause",
+        "group": "sause",
+        "calories": 25,
+        "fat": 0,
+        "carbohydrates": 5,
+        "sodium": 260,
+        "portein": 0,
+        "imports": []
+    },
+    {
+        "name": "ingredient.tomato paste",
+        "group": "sause",
+        "calories": 13,
+        "fat": 0.1,
+        "carbohydrates": 53,
+        "sodium": 16,
+        "portein": 0.7,
+        "imports": []
+    },
+    {
+        "name": "ingredient.tomato sause",
+        "group": "sause",
+        "calories": 70,
+        "fat": 0.4,
+        "carbohydrates": 16,
+        "sodium": 27,
+        "portein": 3.2,
         "imports": []
     },
 
@@ -76,52 +319,137 @@
 
 
     {
-        "name": "ingredient.item.Big Mac",
-        "type": "",
+        "name": "ingredient.item.hamburger-Big Mac",
+        "group": "ITEM",
         "imports": [
             "ingredient.beef",
             "ingredient.lettuce",
-            "ingredient.American cheese"
-           
+            "ingredient.cheese-America",
+            "ingredient.bun"
+        ]
+    },
+    {
+        "name": "ingredient.item.french fries",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.potato"
         ]
     },
 
     {
         "name": "ingredient.item.fried rice",
-        "type": "",
+        "group": "ITEM",
         "imports": [
             "ingredient.white rice",
             "ingredient.soy sause",
-            "ingredient.egg",
+            "ingredient.hoisin sause",
             "ingredient.pea",
             "ingredient.carrot",
             "ingredient.green onion"
            
         ]
     },
-
-
-
-
+    {
+        "name": "ingredient.item.kung pao chicken",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.chicken-breast",
+            "ingredient.soy sause",
+            "ingredient.peanut"
+        ]
+    },
 
     {
-        "name": "ingredient.item.type.fast food",
-        "type": "",
+        "name": "ingredient.item.pizze-cheese",
+        "group": "ITEM",
         "imports": [
-            "ingredient.item.Big Mac"
-           
-           
+            "ingredient.pizza crust",
+            "ingredient.cheese-Mozzarella",
+            "ingredient.tomato paste"
+        ]
+    },
+    {
+        "name": "ingredient.item.spaghetti-bolognese",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.beef-ground",
+            "ingredient.onion",
+            "ingredient.tomato sause",
+            "ingredient.spaghetti"
+        ]
+    },
+    {
+        "name": "ingredient.item.ramen",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.pork-belly",
+            "ingredient.ramen noodles",
+            "ingredient.soy sause",
+            "ingredient.green onion"
+        ]
+    },
+    {
+        "name": "ingredient.item.sushi-salmon",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.salmon",
+            "ingredient.sushi rice"
+        ]
+    },
+    {
+        "name": "ingredient.item.taco-beef",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.beef-ground",
+            "ingredient.tomato sause",
+            "ingredient.corn tortillas",
+            "ingredient.cheese-cheddar"
+        ]
+    },
+
+
+    
+    {
+        "name": "ingredient.item.type.fast food",
+        "group": "TYPE",
+        "imports": [
+            "ingredient.item.hamburger-Big Mac",
+            "ingredient.item.french fries"
         ]
     },
 
     {
         "name": "ingredient.item.type.Chinese food",
-        "type": "",
+        "group": "TYPE",
         "imports": [
-            "ingredient.item.fried rice"
-           
-           
+            "ingredient.item.fried rice",
+            "ingredient.item.kung pao chicken"
+        ]
+    },
+
+    {
+        "name": "ingredient.item.type.italian food",
+        "group": "TYPE",
+        "imports": [
+            "ingredient.item.pizze-cheese",
+            "ingredient.item.spaghetti-bolognese"
+        ]
+    },
+
+    {
+        "name": "ingredient.item.type.japanese food",
+        "group": "TYPE",
+        "imports": [
+            "ingredient.item.ramen",
+            "ingredient.item.sushi-salmon"
+        ]
+    },
+
+    {
+        "name": "ingredient.item.type.Mexican food",
+        "group": "TYPE",
+        "imports": [
+            "ingredient.item.taco-beef"
         ]
     }
-
 ]

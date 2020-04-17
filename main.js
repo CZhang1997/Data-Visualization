@@ -99,7 +99,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("text-anchor", d => d.x < Math.PI ? "start" : "end") // Display position
         .attr("transform", d => d.x >= Math.PI ? "rotate(180)" : null) // Display location
         .text(d => d.data.name) // Text
-        .attr("fill", function(d){ return generateTextColor(d.data.type) }) // Text Color
+        .attr("fill", function(d){ return generateTextColor(d.data.group) }) // Text Color
         .each(function(d) { d.text = this; })
         .on("mouseover", overed)
         .on("mouseout", outed)
@@ -134,9 +134,9 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         link.style("mix-blend-mode", "multiply");
         d3.select(this).attr("font-weight", null);
         d3.selectAll(d.incoming.map(d => d.path)).attr("stroke", null);
-        d3.selectAll(d.incoming.map(([d]) => d.text)).attr("fill", null).attr("font-weight", null);
+        d3.selectAll(d.incoming.map(([d]) => d.text)).attr("fill", function(d){ return generateTextColor(d.data.group) }).attr("font-weight", null);
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", null);
-        d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("fill", null).attr("font-weight", null);
+        d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("fill", function(d){ return generateTextColor(d.data.group) }).attr("font-weight", null);
     }
         
     // Function that reads data and build hierarchy relationships
@@ -187,8 +187,12 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         typeColorMap.set('dairy', '#DD33FF');
         typeColorMap.set('fruit', '#ACFF33');
         typeColorMap.set('vegetable', '#106F1C');
+        typeColorMap.set('legumes', '#C1FF00');
         typeColorMap.set('grain', '#EAD11A');
         typeColorMap.set('sause', '#A52A2A');
+        typeColorMap.set('ITEM', '#2A2E20');
+        typeColorMap.set('TYPE', '#000000');
+
         return typeColorMap.get(type);
     }
 
