@@ -59,7 +59,7 @@
 
     {
         "name": "ingredient.American cheese",
-        "type": "diary",
+        "type": "dairy",
         "imports": []
     },
     
@@ -77,6 +77,7 @@
 
     {
         "name": "ingredient.item.Big Mac",
+        "type": "",
         "imports": [
             "ingredient.beef",
             "ingredient.lettuce",
@@ -87,6 +88,7 @@
 
     {
         "name": "ingredient.item.fried rice",
+        "type": "",
         "imports": [
             "ingredient.white rice",
             "ingredient.soy sause",
@@ -104,6 +106,7 @@
 
     {
         "name": "ingredient.item.type.fast food",
+        "type": "",
         "imports": [
             "ingredient.item.Big Mac"
            
@@ -113,6 +116,7 @@
 
     {
         "name": "ingredient.item.type.Chinese food",
+        "type": "",
         "imports": [
             "ingredient.item.fried rice"
            
