@@ -3,7 +3,7 @@
 @reference: https://observablehq.com/@d3/hierarchical-edge-bundling
 */
 const contents = d3.select(".contents");
-var margin = {left: -300, right: 50, top:20, bottom:0};
+var margin = {left: -200, right: 50, top: -200, bottom:0};
 var colorin = "#00f"
 var colorout = "#f00"
 var colornone = "#ccc"
@@ -12,8 +12,9 @@ var width = 900
 var mid_width = width / 2;
 var mid_height = height /2.4;
 var radius = width / 2
-var bar_width = 600
+var bar_width = 400
 
+var plotDataSet = [];
 
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
@@ -22,7 +23,11 @@ line = d3.lineRadial()
 tree = d3.cluster()
     .size([2 * Math.PI, radius - 100])
   
-
+    var dd = []
+    d3.csv("data/temp.csv", function(data2)
+    {  
+      dd.push(data2);
+    })
 // Read data from json file
 d3.json("data/data.json").then(function(da) { // this cover all code below
   //return dat;
@@ -43,41 +48,34 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
 
 // Add X axis
   var x = d3.scaleLinear()
-  .domain([-100, 100])
+  .domain([0, d3.max(plotDataSet, function(d) { return d[0]; })])
   .range([ 0, bar_width]);
+  var y = d3.scaleLinear()
+  .domain([0, d3.max(plotDataSet, function(d) { return d[1]; })])
+  .range([0,bar_width]);
 
    svg.append("g")
   .attr("class", "axis")
   .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
   .call(d3.axisBottom(x));
   // Add Y axis
-  var y = d3.scaleLinear()
-    .domain([-100, 100])
-    .range([bar_width, 0]);
-
   svg.append("g")
   .attr("class", "axis")
-    .attr("transform", "translate("+ (margin.left + bar_width/ 2) +"," + (margin.top - bar_width/ 2) + ")")
+  .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
+    //.attr("transform", "translate("+ (margin.left + bar_width/ 2) +"," + (margin.top - bar_width/ 2) + ")")
     .call(d3.axisLeft(y));
-
-    var dd = []
-    d3.csv("data/temp.csv", function(data2)
-    {  
-      dd.push(data2);
-    })
-        console.log(dd)
-
-        // Add dots  DO NOT WORK AT THE MOMENT
-        svg.append('g')
-      .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
+    // Add dots  DO NOT WORK AT THE MOMENT
+  svg.append('g')
+     // .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
       .selectAll("dot")
-      .data(dd)
+      .data(root.leaves())
       .enter()
       .append("circle")
-        .attr("cx", function (d2) { console.log(d2.c); return x(d2.c);})
-        .attr("cy", function (d2) { return y(d2.f); })
-        .attr("r", 1.5)
-        .style("fill", "#69b3a2")
+      .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
+        .attr("cx", function (d) { return x(d.data["fat"]);})
+        .attr("cy", function (d) { return y(d.data["calories"]); })
+        .attr("r", 3)
+        .style("fill", function(d){ return generateTextColor(d.data.group);})
        
     // Node
     const node = svg.append("g")
@@ -100,7 +98,8 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .call(text => text.append("title")
             .text(d => `${id(d)}
                 ${d.outgoing.length} outgoing
-                ${d.incoming.length} incoming`
+                ${d.incoming.length} incoming
+                fat: ${d.data["fat"]}`
                 ));
 
     // Link that connects nodes with each other
@@ -145,7 +144,10 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
               
             const i = name.lastIndexOf(delimiter);
             map.set(name, data);
-              
+            if("fat" in data)   // add data to plot data set
+            {
+                plotDataSet.push([data["fat"], data["calories"]]);
+            }
             if (i >= 0) {
                 find({name: name.substring(0, i), children: []}).children.push(data);
                 data.name = name.substring(i + 1);
@@ -156,7 +158,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
               
             return data;
             });
-            
+            console.log(plotDataSet);
             return root;
     }
         
