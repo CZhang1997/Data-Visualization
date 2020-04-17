@@ -20,7 +20,11 @@ tree = d3.cluster()
     
 
 d3.json("data/data.json").then(function(da) { // this cover all code below
- 
+  //return dat;
+//});
+console.log(da)
+
+
 data = hierarchy(da)
 const root = tree(bilink(d3.hierarchy(data)
 .sort((a, b) => d3.ascending(a.height, b.height) || d3.ascending(a.data.name, b.data.name))));
