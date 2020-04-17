@@ -3,7 +3,7 @@
 @reference: https://observablehq.com/@d3/hierarchical-edge-bundling
 */
 const contents = d3.select(".contents");
-var margin = {left:0, right: 50, top:0, bottom:0, center: "50%"};
+var margin = {left: -300, right: 50, top:20, bottom:0};
 var colorin = "#00f"
 var colorout = "#f00"
 var colornone = "#ccc"
@@ -12,6 +12,8 @@ var width = 900
 var mid_width = width / 2;
 var mid_height = height /2.4;
 var radius = width / 2
+var bar_width = 600
+
 
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
@@ -25,7 +27,6 @@ tree = d3.cluster()
 d3.json("data/data.json").then(function(da) { // this cover all code below
   //return dat;
 //});
-    console.log(da)
 
     data = hierarchy(da)
     
@@ -40,12 +41,54 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
       //.attr("transform","translate("+margin.left+","+margin.top+")")
       .attr("viewBox", [-width / 2, -width / 2 , width, width]);
 
+// Add X axis
+  var x = d3.scaleLinear()
+  .domain([-100, 100])
+  .range([ 0, bar_width]);
 
+   svg.append("g")
+  .attr("class", "axis")
+  .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
+  .call(d3.axisBottom(x));
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([-100, 100])
+    .range([bar_width, 0]);
 
+  svg.append("g")
+  .attr("class", "axis")
+    .attr("transform", "translate("+ (margin.left + bar_width/ 2) +"," + (margin.top - bar_width/ 2) + ")")
+    .call(d3.axisLeft(y));
+
+    var dd = []
+    d3.csv("data/temp.csv", function(data2)
+    {
+        // Add dots
+        dd.push(data2);
+      })
+        console.log(dd)
+        svg.append('g')
+      .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
+      .selectAll("dot")
+      .data(dd)
+      .enter()
+      .append("circle")
+        .attr("cx", function (d2) { console.log(d2.c); return x(d2.c);} )
+        .attr("cy", function (d2) { return y(d2.f); })
+        .attr("r", 1.5)
+        .style("fill", "#69b3a2")
+        svg.append('g')
+      .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
+
+      .append("circle")
+        .attr("cx", 50)
+        .attr("cy", 80)
+        .attr("r", 1.5)
+        .style("fill", "#69b3a2")
     // Node
     const node = svg.append("g")
         .attr("font-family", "sans-serif")
-        .attr("font-size", 20)
+        .attr("font-size", 15)
         .selectAll("g")
         .data(root.leaves())
         .join("g")
