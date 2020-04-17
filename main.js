@@ -3,19 +3,20 @@
 @reference: https://observablehq.com/@d3/hierarchical-edge-bundling
 */
 const contents = d3.select(".contents");
-var margin = {left: -200, right: 50, top: -200, bottom:0};
+var margin = {left: -300, right: 50, top: -200, bottom:0};
+
 var colorin = "#00f"
 var colorout = "#f00"
 var colornone = "#ccc"
 var height = 900
-var width = 900
+var width = 1000
 var mid_width = width / 2;
 var mid_height = height /2.4;
 var radius = width / 2
-var bar_width = 400
-
+var bar_width = 550
+var plotshift = bar_width / 2
 var plotDataSet = [];
-
+var dotSize = 3;
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
     .radius(d => d.y)
@@ -23,18 +24,12 @@ line = d3.lineRadial()
 tree = d3.cluster()
     .size([2 * Math.PI, radius - 100])
   
-    var dd = []
-    d3.csv("data/temp.csv", function(data2)
-    {  
-      dd.push(data2);
-    })
+
 // Read data from json file
 d3.json("data/data.json").then(function(da) { // this cover all code below
-  //return dat;
 //});
 
     data = hierarchy(da)
-    
     // Setting up data for each node
     const root = tree(bilink(d3.hierarchy(data)
         .sort((a, b) => d3.ascending(a.height, b.height) || d3.ascending(a.data.name, b.data.name))));
@@ -56,12 +51,12 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
 
    svg.append("g")
   .attr("class", "axis")
-  .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
+  .attr("transform", "translate("+ margin.left +"," + (margin.top + plotshift) + ")")
   .call(d3.axisBottom(x));
   // Add Y axis
   svg.append("g")
   .attr("class", "axis")
-  .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
+  .attr("transform", "translate("+ (margin.left + plotshift) +"," + margin.top + ")")
     //.attr("transform", "translate("+ (margin.left + bar_width/ 2) +"," + (margin.top - bar_width/ 2) + ")")
     .call(d3.axisLeft(y));
     // Add dots  DO NOT WORK AT THE MOMENT
@@ -74,8 +69,9 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
       .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
         .attr("cx", function (d) { return x(d.data["fat"]);})
         .attr("cy", function (d) { return y(d.data["calories"]); })
-        .attr("r", 3)
-        .style("fill", function(d){ return generateTextColor(d.data.group);})
+        .attr("r", dotSize)
+        .style("fill", colornone)
+        .each(function(d){d.dot = this;})
        
     // Node
     const node = svg.append("g")
@@ -91,7 +87,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("text-anchor", d => d.x < Math.PI ? "start" : "end") // Display position
         .attr("transform", d => d.x >= Math.PI ? "rotate(180)" : null) // Display location
         .text(d => d.data.name) // Text
-        .attr("fill", function(d){ return generateTextColor(d.data.group) }) // Text Color
+        .attr("fill", function(d){ return generateTextColor(d.data.group); }) // Text Color
         .each(function(d) { d.text = this; })
         .on("mouseover", overed)
         .on("mouseout", outed)
@@ -121,6 +117,9 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         d3.selectAll(d.incoming.map(([d]) => d.text)).attr("fill", colorin).attr("font-weight", "bold");
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", colorout).raise();
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("fill", colorout).attr("font-weight", "bold");
+        d3.select(d.dot).attr("r", dotSize *2).style("fill", function(d){ return generateTextColor(d.data.group);});
+   //     d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize *2).style("fill", function(d){ return generateTextColor(d.data.group);});
+     //   d3.selectAll(d.outgoing.map(([d]) => d.dot)).attr("r", dotSize *2).style("fill", function(d){ return generateTextColor(d.data.group);});
     }
         
     function outed(d) {
@@ -130,6 +129,10 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         d3.selectAll(d.incoming.map(([d]) => d.text)).attr("fill", function(d){ return generateTextColor(d.data.group) }).attr("font-weight", null);
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", null);
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("fill", function(d){ return generateTextColor(d.data.group) }).attr("font-weight", null);
+        d3.select(d.dot).attr("r", dotSize).style("fill", colornone);
+    //    d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
+     //   d3.selectAll(d.outgoing.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
+
     }
         
     // Function that reads data and build hierarchy relationships
@@ -158,7 +161,8 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
               
             return data;
             });
-            console.log(plotDataSet);
+            
+            //console.log(plotDataSet);
             return root;
     }
         
