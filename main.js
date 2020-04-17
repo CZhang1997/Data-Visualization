@@ -62,29 +62,23 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
 
     var dd = []
     d3.csv("data/temp.csv", function(data2)
-    {
-        // Add dots
-        dd.push(data2);
-      })
+    {  
+      dd.push(data2);
+    })
         console.log(dd)
+
+        // Add dots  DO NOT WORK AT THE MOMENT
         svg.append('g')
       .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
       .selectAll("dot")
       .data(dd)
       .enter()
       .append("circle")
-        .attr("cx", function (d2) { console.log(d2.c); return x(d2.c);} )
+        .attr("cx", function (d2) { console.log(d2.c); return x(d2.c);})
         .attr("cy", function (d2) { return y(d2.f); })
         .attr("r", 1.5)
         .style("fill", "#69b3a2")
-        svg.append('g')
-      .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
-
-      .append("circle")
-        .attr("cx", 50)
-        .attr("cy", 80)
-        .attr("r", 1.5)
-        .style("fill", "#69b3a2")
+       
     // Node
     const node = svg.append("g")
         .attr("font-family", "sans-serif")
