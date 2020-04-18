@@ -3,20 +3,25 @@
 @reference: https://observablehq.com/@d3/hierarchical-edge-bundling
 */
 const contents = d3.select(".contents");
-var margin = {left: -300, right: 50, top: -200, bottom:0};
+
 
 var colorin = "#00f"
 var colorout = "#f00"
 var colornone = "#ccc"
 var height = 900
 var width = 1000
+/// not use ??
 var mid_width = width / 2;
 var mid_height = height /2.4;
+/////
 var radius = width / 2
-var bar_width = 550
+var bar_width = 700
+
+var margin = {left: -bar_width/2, right: 50, top: -bar_width/2, bottom:0};
 var plotshift = bar_width / 2
 var plotDataSet = [];
 var dotSize = 3;
+
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
     .radius(d => d.y)
@@ -36,9 +41,8 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
 
 
     const svg = d3.select("body").append("svg")
-      .attr("width", width)
+      .attr("width", width + 100)
       .attr("height", height)
-      //.attr("transform","translate("+margin.left+","+margin.top+")")
       .attr("viewBox", [-width / 2, -width / 2 , width, width]);
 
 // Add X axis
@@ -57,11 +61,9 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
   svg.append("g")
   .attr("class", "axis")
   .attr("transform", "translate("+ (margin.left + plotshift) +"," + margin.top + ")")
-    //.attr("transform", "translate("+ (margin.left + bar_width/ 2) +"," + (margin.top - bar_width/ 2) + ")")
     .call(d3.axisLeft(y));
     // Add dots  DO NOT WORK AT THE MOMENT
   svg.append('g')
-     // .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
       .selectAll("dot")
       .data(root.leaves())
       .enter()
@@ -95,6 +97,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
             .text(d => `${id(d)}
                 ${d.outgoing.length} outgoing
                 ${d.incoming.length} incoming
+                calories: ${d.data["calories"]}
                 fat: ${d.data["fat"]}`
                 ));
 
@@ -118,8 +121,8 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", colorout).raise();
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("fill", colorout).attr("font-weight", "bold");
         d3.select(d.dot).attr("r", dotSize *2).style("fill", function(d){ return generateTextColor(d.data.group);});
-   //     d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize *2).style("fill", function(d){ return generateTextColor(d.data.group);});
-     //   d3.selectAll(d.outgoing.map(([d]) => d.dot)).attr("r", dotSize *2).style("fill", function(d){ return generateTextColor(d.data.group);});
+    //    d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize *2).style("fill", function(d){ return generateTextColor(d.data.group);});
+ //       d3.selectAll(d.outgoing.map(([d]) => d.dot)).attr("r", dotSize *2).style("fill", function(d){ return generateTextColor(d.data.group);});
     }
         
     function outed(d) {
@@ -130,7 +133,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", null);
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("fill", function(d){ return generateTextColor(d.data.group) }).attr("font-weight", null);
         d3.select(d.dot).attr("r", dotSize).style("fill", colornone);
-    //    d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
+     //   d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
      //   d3.selectAll(d.outgoing.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
 
     }
