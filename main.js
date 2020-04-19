@@ -20,7 +20,7 @@ var bar_width = 700
 var margin = {left: -bar_width/2, right: 50, top: -bar_width/2, bottom:0};
 var plotshift = bar_width / 2
 var plotDataSet = [];
-var dotSize = 3;
+var dotSize = 2;
 
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
@@ -45,36 +45,38 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
       .attr("height", height)
       .attr("viewBox", [-width / 2, -width / 2 , width, width]);
 
-// Add X axis
-  var x = d3.scaleLinear()
-  .domain([0, d3.max(plotDataSet, function(d) { return d[0]; })])
-  .range([ 0, bar_width]);
-  var y = d3.scaleLinear()
-  .domain([0, d3.max(plotDataSet, function(d) { return d[1]; })])
-  .range([0,bar_width]);
-
-   svg.append("g")
-  .attr("class", "axis")
-  .attr("transform", "translate("+ margin.left +"," + (margin.top + plotshift) + ")")
-  .call(d3.axisBottom(x));
-  // Add Y axis
-  svg.append("g")
-  .attr("class", "axis")
-  .attr("transform", "translate("+ (margin.left + plotshift) +"," + margin.top + ")")
-    .call(d3.axisLeft(y));
+    
+    // Set up domain&range for xy axis
+    var x = d3.scaleLinear()
+        .domain([0, d3.max(plotDataSet, function(d) { return d[0]; })])
+        .range([0, bar_width]);
+    var y = d3.scaleLinear()
+        .domain([0, d3.max(plotDataSet, function(d) { return d[1]; })])
+        .range([0, bar_width]);
+    // Add X axis
+    svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate("+ margin.left +"," + (margin.top + plotshift) + ")")
+        .call(d3.axisBottom(x));
+    // Add Y axis
+    svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate("+ (margin.left + plotshift) +"," + margin.top + ")")
+        .call(d3.axisLeft(y));
+   
     // Add dots  DO NOT WORK AT THE MOMENT
-  svg.append('g')
-      .selectAll("dot")
-      .data(root.leaves())
-      .enter()
-      .append("circle")
-      .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
+    svg.append('g')
+        .selectAll("dot")
+        .data(root.children) // Only displays dot for ingredients
+        .enter()
+        .append("circle")
+        .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
         .attr("cx", function (d) { return x(d.data["fat"]);})
         .attr("cy", function (d) { return y(d.data["calories"]); })
         .attr("r", dotSize)
         .style("fill", colornone)
         .each(function(d){d.dot = this;})
-       
+
     // Node
     const node = svg.append("g")
         .attr("font-family", "sans-serif")
@@ -92,6 +94,8 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("fill", function(d){ return generateTextColor(d.data.group); }) // Text Color
         .each(function(d) { d.text = this; })
         .on("mouseover", overed)
+        //.on("mouseover", function(d){ return overed_dot(root.children[root.children.length - 1]) })
+        //.on("mouseover", overed_dot(d => root.children[root.children.length - 1]))
         .on("mouseout", outed)
         .call(text => text.append("title")
             .text(d => `${id(d)}
@@ -112,30 +116,33 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("d", ([i, o]) => line(i.path(o)))
         .each(function(d) { d.path = this; });
 
-        
+    // Mouse is on the node    
     function overed(d) {
         link.style("mix-blend-mode", null);
         d3.select(this).attr("font-weight", "bold");
         d3.selectAll(d.incoming.map(d => d.path)).attr("stroke", colorin).raise();
-        d3.selectAll(d.incoming.map(([d]) => d.text)).attr("fill", colorin).attr("font-weight", "bold");
+        d3.selectAll(d.incoming.map(([d]) => d.text)).attr("font-weight", "bold").attr("font-size", 25);
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", colorout).raise();
-        d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("fill", colorout).attr("font-weight", "bold");
-        d3.select(d.dot).attr("r", dotSize *2).style("fill", function(d){ return generateTextColor(d.data.group);});
-    //    d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize *2).style("fill", function(d){ return generateTextColor(d.data.group);});
- //       d3.selectAll(d.outgoing.map(([d]) => d.dot)).attr("r", dotSize *2).style("fill", function(d){ return generateTextColor(d.data.group);});
-    }
+        d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", "bold").attr("font-size", 25);
         
+        // Lighten up each item's ingredients' dots
+        d3.selectAll(d.outgoing.map(([, d]) => d.dot))
+            .attr("r", dotSize * 4)
+            .style("fill", function(d){ return generateTextColor(d.data.group);});
+    }
+
+    // Mouse is off the node
     function outed(d) {
         link.style("mix-blend-mode", "multiply");
         d3.select(this).attr("font-weight", null);
         d3.selectAll(d.incoming.map(d => d.path)).attr("stroke", null);
-        d3.selectAll(d.incoming.map(([d]) => d.text)).attr("fill", function(d){ return generateTextColor(d.data.group) }).attr("font-weight", null);
+        d3.selectAll(d.incoming.map(([d]) => d.text)).attr("font-weight", null).attr("font-size", 15);
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", null);
-        d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("fill", function(d){ return generateTextColor(d.data.group) }).attr("font-weight", null);
+        d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", null).attr("font-size", 15);
         d3.select(d.dot).attr("r", dotSize).style("fill", colornone);
      //   d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
      //   d3.selectAll(d.outgoing.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
-
+        d3.selectAll(d.outgoing.map(([, d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
     }
         
     // Function that reads data and build hierarchy relationships
@@ -165,7 +172,6 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
             return data;
             });
             
-            //console.log(plotDataSet);
             return root;
     }
         
