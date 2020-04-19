@@ -317,10 +317,14 @@
 
 
 
-
     {
         "name": "ingredient.item.hamburger-Big Mac",
         "group": "ITEM",
+        "calories": 70,
+        "fat": 0.4,
+        "carbohydrates": 16,
+        "sodium": 27,
+        "portein": 3.2,
         "imports": [
             "ingredient.beef",
             "ingredient.lettuce",
