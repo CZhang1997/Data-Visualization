@@ -60,6 +60,16 @@
         "imports": []
     },
     {
+        "name": "ingredient.pork-loin",
+        "group": "meat",
+        "calories": 206,
+        "fat": 12,
+        "carbohydrates": 0,
+        "sodium": 53,
+        "portein": 23,
+        "imports": []
+    },
+    {
         "name": "ingredient.salmon",
         "group": "meat",
         "calories": 121,
@@ -67,6 +77,16 @@
         "carbohydrates": 0,
         "sodium": 37.4,
         "portein": 17,
+        "imports": []
+    },
+    {
+        "name": "ingredient.shrimp",
+        "group": "meat",
+        "calories": 76,
+        "fat": 1,
+        "carbohydrates": 1,
+        "sodium": 292,
+        "portein": 15,
         "imports": []
     },
     {
@@ -228,6 +248,16 @@
         "imports": []
     },
     {
+        "name": "ingredient.flour",
+        "group": "grain",
+        "calories": 455,
+        "fat": 1.2,
+        "carbohydrates": 95.4,
+        "sodium": 3,
+        "portein": 12.9,
+        "imports": []
+    },
+    {
         "name": "ingredient.corn tortillas",
         "group": "grain",
         "calories": 52,
@@ -313,7 +343,38 @@
         "portein": 3.2,
         "imports": []
     },
+    {
+        "name": "ingredient.tonkatsu sause",
+        "group": "sause",
+        "calories": 14,
+        "fat": 0,
+        "carbohydrates": 3.4,
+        "sodium": 167,
+        "portein": 0.1,
+        "imports": []
+    },
+    {
+        "name": "ingredient.teriyaki sause",
+        "group": "sause",
+        "calories": 70,
+        "fat": 0,
+        "carbohydrates": 16,
+        "sodium": 380,
+        "portein": 0,
+        "imports": []
+    },
 
+
+    {
+        "name": "ingredient.vegetable oil",
+        "group": "other",
+        "calories": 124,
+        "fat": 14,
+        "carbohydrates": 0,
+        "sodium": 0,
+        "portein": 0,
+        "imports": []
+    },
 
 
 
@@ -401,6 +462,34 @@
         ]
     },
     {
+        "name": "ingredient.item.shrimp tempura",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.shrimp",
+            "ingredient.soy sause",
+            "ingredient.flour",
+            "ingredient.vegetable oil"
+        ]
+    },
+    {
+        "name": "ingredient.item.tonkatsu",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.pork-loin",
+            "ingredient.tonkatsu sause",
+            "ingredient.flour",
+            "ingredient.egg"
+        ]
+    },
+    {
+        "name": "ingredient.item.teriyaki chicken",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.chicken-breast",
+            "ingredient.teriyaki sause"
+        ]
+    },
+    {
         "name": "ingredient.item.taco-beef",
         "group": "ITEM",
         "imports": [
@@ -445,7 +534,10 @@
         "group": "TYPE",
         "imports": [
             "ingredient.item.ramen",
-            "ingredient.item.sushi-salmon"
+            "ingredient.item.sushi-salmon",
+            "ingredient.item.shrimp tempura",
+            "ingredient.item.tonkatsu",
+            "ingredient.item.teriyaki chicken"
         ]
     },
 
