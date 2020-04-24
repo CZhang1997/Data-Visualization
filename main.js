@@ -127,13 +127,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         //.on("mouseover", overed_dot(d => root.children[root.children.length - 1]))
         .on("mouseout", outed)
         .call(text => text.append("title") // Display a text box for nutrition facts
-            .text(d => 
-                `${d.data["group"]}
-                calories: ${d.data["calories"]}
-                fat(g): ${d.data["fat"]}
-                carbohydrates(g): ${d.data["carbohydrates"]}
-                sodium(mg): ${d.data["sodium"]}
-                portein(g): ${d.data["portein"]}`)
+            .text(d => getInfo(d))
             ); /*
                 ${id(d)}
                 ${d.outgoing.length} outgoing
@@ -275,6 +269,20 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         return typeColorMap.get(type);
     }
 
+    // display information when mouse hover the name
+    function getInfo(d)
+    {   // can change base on different value
+        if(d.data["group"] == "ITEM" || d.data["group"] == "TYPE")
+        {
+            return "";
+        }
+        return `${d.data["group"]}
+        calories: ${d.data["calories"]}
+        fat(g): ${d.data["fat"]}
+        carbohydrates(g): ${d.data["carbohydrates"]}
+        sodium(mg): ${d.data["sodium"]}
+        portein(g): ${d.data["portein"]}`;
+    }
     function caloriesFix(cal)
     {
         if(parseFloat(cal) > 200)
