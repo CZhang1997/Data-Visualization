@@ -148,11 +148,11 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
  //   /*
     Reference: https://www.d3-graph-gallery.com/graph/bubble_template.html
     var width3 = width2 - 100
-    svg.selectAll("myrect")
+    svg.append("g").selectAll("myrect")
         .data(ingredient_type)
         .enter()
         .append("circle")
-        .attr("cx", width3-100)
+        .attr("cx", 100)
         .attr("cy", function(d,i){ return 10 + i*(20+5)}) // 100 is where the first dot appears. 25 is the distance between dots
         .attr("r", 10)
         .style("fill", "red") // function(d){ return myColor(d)})
