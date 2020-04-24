@@ -60,13 +60,13 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .domain([0, d3.max(plotDataSet, function(d) { return d[1]; })])
 
         .range([bar_width, 0]);
-    
+    var tickNumber = 2;
     // Add X axis
     svg.append("g")
         .attr("class", "axis")
         .attr("stroke-width", "2")
         .attr("transform", "translate("+ margin.left +"," + (margin.top + plotshift) + ")")
-        .call(d3.axisBottom(x).ticks(0));
+        .call(d3.axisBottom(x).ticks(tickNumber));
 
     // Add X axis label
     svg.append("text")
@@ -81,7 +81,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("class", "axis")
         .attr("stroke-width", "2")
         .attr("transform", "translate("+ (margin.left + plotshift) +"," + margin.top + ")")
-        .call(d3.axisLeft(y).ticks(0));
+        .call(d3.axisLeft(y).ticks(tickNumber));
     
     // Add Y axis label
     svg.append("text")
@@ -100,7 +100,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .append("circle")
         .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
         .attr("cx", function (d) { return x(d.data["fat"]);}) // x-axis value
-        .attr("cy", function (d) { return y(d.data["calories"]); }) // y -axis value
+        .attr("cy", function (d) { return y(caloriesFix(d.data["calories"])); }) // y -axis value
         .attr("r", dotSize)
         .style("fill", colornone)
         .each(function(d){d.dot = this;})
@@ -225,7 +225,10 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
             map.set(name, data);
             if("fat" in data)   // add data to plot data set
             {
-                plotDataSet.push([data["fat"], data["calories"]]);
+                var fat = data["fat"];
+                var cal = caloriesFix(data["calories"]);
+                
+                plotDataSet.push([fat, cal]);
             }
             if (i >= 0) {
                 find({name: name.substring(0, i), children: []}).children.push(data);
@@ -272,6 +275,13 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         return typeColorMap.get(type);
     }
 
-    
+    function caloriesFix(cal)
+    {
+        if(parseFloat(cal) > 200)
+        {
+            cal = 200;
+        }
+        return cal;
+    }
 });
 
