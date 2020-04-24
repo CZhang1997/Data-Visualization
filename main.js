@@ -15,12 +15,14 @@ var mid_width = width / 2;
 var mid_height = height /2.4;
 /////
 var radius = width / 2
-var bar_width = 700
+var bar_width = 600
 
 var margin = {left: -bar_width/2, right: 50, top: -bar_width/2, bottom:0};
 var plotshift = bar_width / 2
 var plotDataSet = [];
 var dotSize = 2;
+
+var ingredient_type = ["meat", "dairy", "fruit", "vegetable", "legumes", "grain", "sause", "other"];
 
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
@@ -52,27 +54,46 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .range([0, bar_width]);
     var y = d3.scaleLinear()
         .domain([0, d3.max(plotDataSet, function(d) { return d[1]; })])
-        .range([0, bar_width]);
+        .range([bar_width, 0]);
+    
     // Add X axis
     svg.append("g")
         .attr("class", "axis")
         .attr("transform", "translate("+ margin.left +"," + (margin.top + plotshift) + ")")
         .call(d3.axisBottom(x));
+
+    // Add X axis label
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("font-weight", "bold")
+        .attr("x", -margin.left+25 )
+        .attr("y", 5 )
+        .text("fat");
+    
     // Add Y axis
     svg.append("g")
         .attr("class", "axis")
         .attr("transform", "translate("+ (margin.left + plotshift) +"," + margin.top + ")")
         .call(d3.axisLeft(y));
+    
+    // Add Y axis label
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("font-weight", "bold")
+        .attr("x", -30)
+        .attr("y", margin.top-5)
+        .text("calories")
+        .attr("text-anchor", "start");
    
-    // Add dots  DO NOT WORK AT THE MOMENT
+    // Add dots
     svg.append('g')
         .selectAll("dot")
         .data(root.children) // Only displays dot for ingredients
         .enter()
         .append("circle")
         .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
-        .attr("cx", function (d) { return x(d.data["fat"]);})
-        .attr("cy", function (d) { return y(d.data["calories"]); })
+        .attr("cx", function (d) { return x(d.data["fat"]);}) // x-axis value
+        .attr("cy", function (d) { return y(d.data["calories"]); }) // y -axis value
         .attr("r", dotSize)
         .style("fill", colornone)
         .each(function(d){d.dot = this;})
@@ -97,13 +118,18 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         //.on("mouseover", function(d){ return overed_dot(root.children[root.children.length - 1]) })
         //.on("mouseover", overed_dot(d => root.children[root.children.length - 1]))
         .on("mouseout", outed)
-        .call(text => text.append("title")
-            .text(d => `${id(d)}
-                ${d.outgoing.length} outgoing
-                ${d.incoming.length} incoming
+        .call(text => text.append("title") // Display a text box for nutrition facts
+            .text(d => 
+                `${d.data["group"]}
                 calories: ${d.data["calories"]}
-                fat: ${d.data["fat"]}`
-                ));
+                fat(g): ${d.data["fat"]}
+                carbohydrates(g): ${d.data["carbohydrates"]}
+                sodium(mg): ${d.data["sodium"]}
+                portein(g): ${d.data["portein"]}`)
+            ); /*
+                ${id(d)}
+                ${d.outgoing.length} outgoing
+                ${d.incoming.length} incoming*/
 
     // Link that connects nodes with each other
     const link = svg.append("g")
@@ -115,7 +141,24 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .style("mix-blend-mode", "multiply")
         .attr("d", ([i, o]) => line(i.path(o)))
         .each(function(d) { d.path = this; });
+    
+    // Legend
+    /*
+    Reference: https://www.d3-graph-gallery.com/graph/bubble_template.html
+    svg.selectAll("myrect")
+        .data(ingredient_type)
+        .enter()
+        .append("circle")
+        .attr("cx", width-100)
+        .attr("cy", function(d,i){ return 10 + i*(size+5)}) // 100 is where the first dot appears. 25 is the distance between dots
+        .attr("r", 7)
+        .style("fill", function(d){ return myColor(d)})
+        .on("mouseover", highlight)
+        .on("mouseleave", noHighlight);*/
+    
 
+
+    
     // Mouse is on the node    
     function overed(d) {
         link.style("mix-blend-mode", null);
