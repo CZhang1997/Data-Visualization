@@ -10,7 +10,7 @@ var colorout = "#f00"
 var colornone = "#ccc"
 // get screen height, most pc screen has greater width than height, pick smaller value
 
-var height = window.screen.height - 250
+var height = window.screen.height - 100
 var width = height //window.screen.height - 200
 
                 // minus value to change the length of the axis
@@ -50,6 +50,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
       .attr("viewBox", [-boxWidth / 2, -boxWidth / 2 , boxWidth, boxWidth]);
 
     
+    
     // Set up domain&range for xy axis
     var x = d3.scaleLinear()
         .domain([0, d3.max(plotDataSet, function(d) { return d[0]; })])
@@ -62,6 +63,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     svg.append("g")
         .attr("class", "axis")
         .attr("transform", "translate("+ margin.left +"," + (margin.top + plotshift) + ")")
+        
         .call(d3.axisBottom(x));
 
     // Add X axis label
@@ -70,7 +72,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("font-weight", "bold")
         .attr("x", -margin.left+25 )
         .attr("y", 5 )
-        .text("fat");
+        .text("FAT");
     
     // Add Y axis
     svg.append("g")
@@ -82,12 +84,12 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     svg.append("text")
         .attr("text-anchor", "end")
         .attr("font-weight", "bold")
-        .attr("x", -30)
+        .attr("x", -35)
         .attr("y", margin.top-5)
-        .text("calories")
+        .text("CALORIES")
         .attr("text-anchor", "start");
    
-    // Add dots
+    // Add dots for scatter plots
     svg.append('g')
         .selectAll("dot")
         .data(root.children) // Only displays dot for ingredients
@@ -102,8 +104,9 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
 
     // Node
     const node = svg.append("g")
-        .attr("font-family", "sans-serif")
+        .attr("font-family", "monospace")
         .attr("font-size", 15)
+        .attr("font-weight", "bold")
         .selectAll("g")
         .data(root.leaves())
         .join("g")
@@ -132,6 +135,19 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
                 ${id(d)}
                 ${d.outgoing.length} outgoing
                 ${d.incoming.length} incoming*/
+
+    // Add dots for each ingredient
+    svg.append('g')
+        .selectAll("node_dot")
+        .data(root.leaves())
+        .enter()
+        .append("circle")
+        .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`)        
+        .attr("r", 5)
+        .attr("fill", function(d){ return generateTextColor(d.data.group); }) // Text Color
+        .each(function(d){d.node_dot = this;})
+
+
 
     // Link that connects nodes with each other
     const link = svg.append("g")
@@ -243,11 +259,12 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         typeColorMap.set('dairy', '#DD33FF');
         typeColorMap.set('fruit', '#ACFF33');
         typeColorMap.set('vegetable', '#106F1C');
-        typeColorMap.set('legumes', '#C1FF00');
+        typeColorMap.set('legumes', '#00FF00');
         typeColorMap.set('grain', '#EAD11A');
         typeColorMap.set('sause', '#A52A2A');
-        typeColorMap.set('ITEM', '#2A2E20');
-        typeColorMap.set('TYPE', '#000000');
+        typeColorMap.set('other', '#935116');
+        typeColorMap.set('ITEM', '#000000');
+        typeColorMap.set('TYPE', '#616A6B');
 
         return typeColorMap.get(type);
     }
