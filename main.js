@@ -53,16 +53,19 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     // Set up domain&range for xy axis
     var x = d3.scaleLinear()
         .domain([0, d3.max(plotDataSet, function(d) { return d[0]; })])
+      //  .ticks(2)
         .range([0, bar_width]);
     var y = d3.scaleLinear()
         .domain([0, d3.max(plotDataSet, function(d) { return d[1]; })])
+
         .range([bar_width, 0]);
     
     // Add X axis
     svg.append("g")
         .attr("class", "axis")
+        .attr("stroke-width", "2")
         .attr("transform", "translate("+ margin.left +"," + (margin.top + plotshift) + ")")
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x).ticks(0));
 
     // Add X axis label
     svg.append("text")
@@ -75,8 +78,9 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     // Add Y axis
     svg.append("g")
         .attr("class", "axis")
+        .attr("stroke-width", "2")
         .attr("transform", "translate("+ (margin.left + plotshift) +"," + margin.top + ")")
-        .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y).ticks(0));
     
     // Add Y axis label
     svg.append("text")
