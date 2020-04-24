@@ -8,14 +8,14 @@ const contents = d3.select(".contents");
 var colorin = "#00f"
 var colorout = "#f00"
 var colornone = "#ccc"
-var height = 900
-var width = 1000
-/// not use ??
-var mid_width = width / 2;
-var mid_height = height /2.4;
-/////
+// get screen height, most pc screen has greater width than height, pick smaller value
+
+var height = window.screen.height - 250
+var width = height //window.screen.height - 200
+
+                // minus value to change the length of the axis
+var bar_width = height - 400 //600
 var radius = width / 2
-var bar_width = 600
 
 var margin = {left: -bar_width/2, right: 50, top: -bar_width/2, bottom:0};
 var plotshift = bar_width / 2
@@ -41,11 +41,13 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     const root = tree(bilink(d3.hierarchy(data)
         .sort((a, b) => d3.ascending(a.height, b.height) || d3.ascending(a.data.name, b.data.name))));
 
-
+    // add more number to reduce the size of the circle
+    var boxWidth = width + 200
+    
     const svg = d3.select("body").append("svg")
       .attr("width", width + 100)
       .attr("height", height)
-      .attr("viewBox", [-width / 2, -width / 2 , width, width]);
+      .attr("viewBox", [-boxWidth / 2, -boxWidth / 2 , boxWidth, boxWidth]);
 
     
     // Set up domain&range for xy axis
@@ -143,18 +145,20 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .each(function(d) { d.path = this; });
     
     // Legend
-    /*
+ //   /*
     Reference: https://www.d3-graph-gallery.com/graph/bubble_template.html
+    var width3 = width2 - 100
     svg.selectAll("myrect")
         .data(ingredient_type)
         .enter()
         .append("circle")
-        .attr("cx", width-100)
-        .attr("cy", function(d,i){ return 10 + i*(size+5)}) // 100 is where the first dot appears. 25 is the distance between dots
-        .attr("r", 7)
-        .style("fill", function(d){ return myColor(d)})
+        .attr("cx", width3-100)
+        .attr("cy", function(d,i){ return 10 + i*(20+5)}) // 100 is where the first dot appears. 25 is the distance between dots
+        .attr("r", 10)
+        .style("fill", "red") // function(d){ return myColor(d)})
         .on("mouseover", highlight)
-        .on("mouseleave", noHighlight);*/
+        .on("mouseleave", noHighlight);
+    //    */
     
 
 
