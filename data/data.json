@@ -379,7 +379,7 @@
 
 
     {
-        "name": "ingredient.item.hamburger-Big Mac",
+        "name": "ingredient.item.Hamburger-Big Mac",
         "group": "ITEM",
         "calories": 70,
         "fat": 0.4,
@@ -394,7 +394,7 @@
         ]
     },
     {
-        "name": "ingredient.item.french fries",
+        "name": "ingredient.item.French Fries",
         "group": "ITEM",
         "imports": [
             "ingredient.potato"
@@ -402,7 +402,7 @@
     },
 
     {
-        "name": "ingredient.item.fried rice",
+        "name": "ingredient.item.Fried Rice",
         "group": "ITEM",
         "imports": [
             "ingredient.white rice",
@@ -415,7 +415,7 @@
         ]
     },
     {
-        "name": "ingredient.item.kung pao chicken",
+        "name": "ingredient.item.Kung Pao Chicken",
         "group": "ITEM",
         "imports": [
             "ingredient.chicken-breast",
@@ -425,7 +425,7 @@
     },
 
     {
-        "name": "ingredient.item.pizze-cheese",
+        "name": "ingredient.item.Pizze-Cheese",
         "group": "ITEM",
         "imports": [
             "ingredient.pizza crust",
@@ -434,7 +434,7 @@
         ]
     },
     {
-        "name": "ingredient.item.spaghetti-bolognese",
+        "name": "ingredient.item.Spaghetti-Bolognese",
         "group": "ITEM",
         "imports": [
             "ingredient.beef-ground",
@@ -444,7 +444,7 @@
         ]
     },
     {
-        "name": "ingredient.item.ramen",
+        "name": "ingredient.item.Ramen",
         "group": "ITEM",
         "imports": [
             "ingredient.pork-belly",
@@ -454,7 +454,7 @@
         ]
     },
     {
-        "name": "ingredient.item.sushi-salmon",
+        "name": "ingredient.item.Sushi-Salmon",
         "group": "ITEM",
         "imports": [
             "ingredient.salmon",
@@ -462,7 +462,7 @@
         ]
     },
     {
-        "name": "ingredient.item.shrimp tempura",
+        "name": "ingredient.item.Shrimp Tempura",
         "group": "ITEM",
         "imports": [
             "ingredient.shrimp",
@@ -472,7 +472,7 @@
         ]
     },
     {
-        "name": "ingredient.item.tonkatsu",
+        "name": "ingredient.item.Tonkatsu",
         "group": "ITEM",
         "imports": [
             "ingredient.pork-loin",
@@ -482,7 +482,7 @@
         ]
     },
     {
-        "name": "ingredient.item.teriyaki chicken",
+        "name": "ingredient.item.Teriyaki Chicken",
         "group": "ITEM",
         "imports": [
             "ingredient.chicken-breast",
@@ -490,7 +490,7 @@
         ]
     },
     {
-        "name": "ingredient.item.taco-beef",
+        "name": "ingredient.item.Taco-Beef",
         "group": "ITEM",
         "imports": [
             "ingredient.beef-ground",
@@ -503,49 +503,49 @@
 
     
     {
-        "name": "ingredient.item.type.fast food",
+        "name": "ingredient.item.type.FAST FOOD",
         "group": "TYPE",
         "imports": [
-            "ingredient.item.hamburger-Big Mac",
-            "ingredient.item.french fries"
+            "ingredient.item.Hamburger-Big Mac",
+            "ingredient.item.French Fries"
         ]
     },
 
     {
-        "name": "ingredient.item.type.Chinese food",
+        "name": "ingredient.item.type.CHINESE FOOD",
         "group": "TYPE",
         "imports": [
-            "ingredient.item.fried rice",
-            "ingredient.item.kung pao chicken"
+            "ingredient.item.Fried Rice",
+            "ingredient.item.Kung Pao Chicken"
         ]
     },
 
     {
-        "name": "ingredient.item.type.italian food",
+        "name": "ingredient.item.type.ITALIAN FOOD",
         "group": "TYPE",
         "imports": [
-            "ingredient.item.pizze-cheese",
-            "ingredient.item.spaghetti-bolognese"
+            "ingredient.item.Pizze-Cheese",
+            "ingredient.item.Spaghetti-Bolognese"
         ]
     },
 
     {
-        "name": "ingredient.item.type.japanese food",
+        "name": "ingredient.item.type.JAPANESE FOOD",
         "group": "TYPE",
         "imports": [
-            "ingredient.item.ramen",
-            "ingredient.item.sushi-salmon",
-            "ingredient.item.shrimp tempura",
-            "ingredient.item.tonkatsu",
-            "ingredient.item.teriyaki chicken"
+            "ingredient.item.Ramen",
+            "ingredient.item.Sushi-Salmon",
+            "ingredient.item.Shrimp Tempura",
+            "ingredient.item.Tonkatsu",
+            "ingredient.item.Teriyaki Chicken"
         ]
     },
 
     {
-        "name": "ingredient.item.type.Mexican food",
+        "name": "ingredient.item.type.MEXICAN FOOD",
         "group": "TYPE",
         "imports": [
-            "ingredient.item.taco-beef"
+            "ingredient.item.Taco-Beef"
         ]
     }
 ]
