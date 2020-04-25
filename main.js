@@ -79,7 +79,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("font-weight", "bold")
         .attr("x", -margin.left + (nutritions[xLabel].length) )
         .attr("y", 5 )
-        .text(nutritions[xLabel]);
+        .text(toUpper(nutritions[xLabel]));
     
     // Add Y axis
     svg.append("g")
@@ -95,7 +95,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("font-weight", "bold")
         .attr("x", 0)
         .attr("y", margin.top-5)
-        .text(nutritions[yLabel]);
+        .text(toUpper(nutritions[yLabel]));
    
     // Add dots for scatter plots
     svg.append('g')
@@ -321,27 +321,22 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     var y = d3.scaleLinear()
         .domain([0, d3.max(plotDataSet, function(d) { return d[yLabel]; })])
         .range([bar_width, 0]);
-    var tickNumber = 2;
 
-
+    tickNumber = 3;
         svg.select(".x-axis")
-        .attr("stroke-width", "2")
-        .attr("transform", "translate("+ margin.left +"," + (margin.top + plotshift) + ")")
         .call(d3.axisBottom(x).ticks(tickNumber));
 
     // Add X axis label
     svg.select(".x-label")
-        .text(nutritions[xLabel]);
+        .text(toUpper(nutritions[xLabel]));
     
     // Add Y axis
     svg.select(".y-axis")
-        .attr("stroke-width", "2")
-        .attr("transform", "translate("+ (margin.left + plotshift) +"," + margin.top + ")")
         .call(d3.axisLeft(y).ticks(tickNumber));
 
     // Add Y axis label;
     svg.select(".y-label")
-        .text(nutritions[yLabel]);
+        .text(toUpper(nutritions[yLabel]));
    
     // Add dots for scatter plots
     svg.selectAll("dot")
@@ -354,6 +349,11 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("r", dotSize)
         .style("fill", colornone)
         .each(function(d){d.dot = this;}) 
-    } 
+    }
+    function toUpper(data)
+    {
+        var upper = data.toUpperCase();
+        return upper;
+    }
 });
 
