@@ -1,44 +1,69 @@
-const contents = d3.select(".contents");
-// set the dimensions and margins of the graph
-var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = 900 - margin.left - margin.right,
-    height = 900 - margin.top - margin.bottom;
+const contents = d3.select("#contents");
 
-// append the svg object to the body of the page
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+var nutritions = ["calories", "fat", "carbohydrates", "sodium", "portein"];
 
-//Read the data
-d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/2_TwoNum.csv", function(data) {
+    // var y_selector = d3.select("#contents").append("select")
+    // .attr("width", 100)
+    // .attr("height", 100)
+    // .attr("x", 100)
+    // .attr("y", 100);
 
-  // Add X axis
-  var x = d3.scaleLinear()
-    .domain([0, 4000])
-    .range([ 0, width ]);
-  svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x));
+    // y_selector.selectAll('myOptions')
+    //     .data(nutritions).enter()
+    //     .append("option")
+    //     .text(function(d) {return d;})
+    //     .attr("value", function(d) {return d;})
 
-  // Add Y axis
-  var y = d3.scaleLinear()
-    .domain([0, 500000])
-    .range([ height, 0]);
-  svg.append("g")
-    .call(d3.axisLeft(y));
+    // y_selector.on("change", function(d) {
+    //     // recover the option that has been chosen
+    //     var selectedOption = d3.select(this).property("value");
+    //     console.log(selectedOption);
+    //     });
 
-  // Add dots
-  svg.append('g')
-    .selectAll("dot")
-    .data(data)
-    .enter()
-    .append("circle")
-      .attr("cx", function (d) { return x(d.GrLivArea); } )
-      .attr("cy", function (d) { return y(d.SalePrice); } )
-      .attr("r", 1.5)
-      .style("fill", "#69b3a2")
+    // Handler for dropdown value change
+    var dropdownChange = function() {
+      var newCereal = d3.select(this).property('value');
+       console.log(newCereal);
+  };
 
-})
+  var svg = d3.select("#contents").append("svg").attr("width", "100%").attr("height", "100%");
+  svg.append("circle")
+    .attr("cx", 100)
+    .attr("cy", 100)
+    .attr("r", 50)
+    .attr("fill", "red");
+
+  var dropdown = d3.select("#contents")
+      .insert("select", "svg")
+      .on("change", dropdownChange);
+
+  dropdown.selectAll("option")
+      .data(nutritions)
+    .enter().append("option")
+      .attr("value", function (d) { return d; })
+      .text(function (d) {
+          return d[0].toUpperCase() + d.slice(1,d.length); // capitalize 1st letter
+      });
+
+
+    //     var yaxis_dropdown = d3.select("#contents").insert("select", "svg")
+    //     .attr("width","50")
+    //     .attr("height","50")
+    //     .attr("x", "100")
+    //     .attr("y", "100")
+    //     .attr("id", "yaxis_select")
+    //     .on("change", yaxis_dropdown_change);
+    // var yaxis_dropdown_change = function()
+    // {
+    //     console.log(d3.select(this).property('value'));
+    // }
+    // yaxis_dropdown.selectAll("option")
+    //     .data(nutritions)
+    //     .enter().append("option")
+    //     .attr("value", function (d) { return d; })
+    //     .text(function (d) {
+    //     return d[0].toUpperCase() + d.slice(1,d.length); // capitalize 1st letter
+    //     });
+
+
+

@@ -2,7 +2,7 @@
 /*
 @reference: https://observablehq.com/@d3/hierarchical-edge-bundling
 */
-const contents = d3.select(".contents");
+const contents = d3.select("#contents");
 
 
 var colorin = "#00f"
@@ -49,7 +49,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .sort((a, b) => d3.ascending(a.height, b.height) || d3.ascending(a.data.name, b.data.name))));
 
     
-    const svg = d3.select("body").append("svg")
+    const svg = d3.select("#contents").append("svg")
       .attr("width", width + 100)
       .attr("height", height)
       .attr("viewBox", [-boxWidth / 2, -boxWidth / 2 , boxWidth, boxWidth]);
@@ -74,7 +74,6 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
 
     // Add X axis label
     svg.append("text")
-
         .attr("class", "x-label")
         .attr("font-family", "monospace")
         .attr("text-anchor", "start")
@@ -99,6 +98,52 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("x", 0)
         .attr("y", margin.top-5)
         .text(toUpper(nutritions[yLabel]));
+
+    
+    var y_selector = d3.select("#contents").append("select")
+    y_selector.selectAll('myOptions')    
+        .attr("id", "y_selector")
+        .data(nutritions).enter()
+        .append("option")
+        .text(function(d) {return d;})
+        .attr("value", function(d) {return d;})
+
+    y_selector.on("change", function(d) {
+        // recover the option that has been chosen
+        var selectedOption = d3.select(this).property("value");
+        console.log(selectedOption);
+        })
+    // var yaxis_dropdown = d3.select("#contents").insert("select", "svg")
+    //     .attr("width","50")
+    //     .attr("height","50")
+    //     .attr("x", "100")
+    //     .attr("y", "100")
+    //     .attr("id", "yaxis_select")
+    //     .on("change", yaxis_dropdown_change);
+    // var yaxis_dropdown_change = function()
+    // {
+    //     console.log(d3.select(this).property('value'));
+    // }
+    // yaxis_dropdown.selectAll("option")
+    //     .data(nutritions)
+    //     .enter().append("option")
+    //     .attr("value", function (d) { return d; })
+    //     .text(function (d) {
+    //     return d[0].toUpperCase() + d.slice(1,d.length); // capitalize 1st letter
+    //     });
+
+    // Add dots for scatter plots
+    svg.append('g')
+    .selectAll("dot")
+    .data(root.children) // Only displays dot for ingredients
+    .enter()
+    .append("circle")
+    .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
+    .attr("cx", function (d) { return x(d.data[nutritions[xLabel]]);}) // x-axis value
+    .attr("cy", function (d) { return y(caloriesFix(d.data[nutritions[yLabel]])); }) // y -axis value
+    .attr("r", dotSize)
+    .style("fill", colornone)
+    .each(function(d){d.dot = this;})
   
     // Define pie, arc functions and data for pie chart whihc color the 4 quadrants
      const pie = d3.pie()
@@ -138,18 +183,6 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("y", "-0.4em")
         .attr("fill-opacity", 0.5)
         .text(d => d.data.text))
-    // Add dots for scatter plots
-    svg.append('g')
-        .selectAll("dot")
-        .data(root.children) // Only displays dot for ingredients
-        .enter()
-        .append("circle")
-        .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
-        .attr("cx", function (d) { return x(d.data[nutritions[xLabel]]);}) // x-axis value
-        .attr("cy", function (d) { return y(caloriesFix(d.data[nutritions[yLabel]])); }) // y -axis value
-        .attr("r", dotSize)
-        .style("fill", colornone)
-        .each(function(d){d.dot = this;})
 
     // Node
     const node = svg.append("g")
