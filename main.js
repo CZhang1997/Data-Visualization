@@ -189,6 +189,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         d3.selectAll(d.incoming.map(([d]) => d.text)).attr("font-weight", "bold").attr("font-size", 25);
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", colorout).raise();
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", "bold").attr("font-size", 25);
+        d3.select(d.dot).attr("r", dotSize * 4).style("fill", function(d){ return generateTextColor(d.data.group);});
         // we can turn this into button
         if(d.data["name"] == "Ramen")
         {
@@ -217,6 +218,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", null);
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", null).attr("font-size", 15);
         d3.select(d.dot).attr("r", dotSize).style("fill", colornone);
+       // d3.select(d.dot).attr("r", dotSize).style("fill", function(d){ return generateTextColor(d.data.group);});
      //   d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
      //   d3.selectAll(d.outgoing.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
         d3.selectAll(d.outgoing.map(([, d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
@@ -322,7 +324,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .domain([0, d3.max(plotDataSet, function(d) { return d[yLabel]; })])
         .range([bar_width, 0]);
 
-    tickNumber = 3;
+    tickNumber = 2;
         svg.select(".x-axis")
         .call(d3.axisBottom(x).ticks(tickNumber));
 
