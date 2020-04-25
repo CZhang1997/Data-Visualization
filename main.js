@@ -237,8 +237,8 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
             map.set(name, data);
             if("fat" in data)   // add data to plot data set
             {
-                var fat = data["fat"];
                 var cal = caloriesFix(data["calories"]);
+                var fat = data["fat"];
                 var carb = data["carbohydrates"];
                 var sodium = data["sodium"];
                 var protein = data["protein"];
