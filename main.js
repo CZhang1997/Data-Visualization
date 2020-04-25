@@ -29,7 +29,7 @@ var ingredient_type = ["meat", "dairy", "fruit", "vegetable", "legumes", "grain"
 var nutritions = ["calories", "fat", "carbohydrates", "sodium", "portein"];
 // change the index below to change to different comparsion 
 var xLabel = 0;
-var yLabel = 1;
+var yLabel = 2;
 
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
@@ -63,7 +63,6 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .range([0, bar_width]);
     var y = d3.scaleLinear()
         .domain([0, d3.max(plotDataSet, function(d) { return d[yLabel]; })])
-
         .range([bar_width, 0]);
     var tickNumber = 2;
     // Add X axis
@@ -90,9 +89,9 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     
     // Add Y axis label
     svg.append("text")
-        .attr("text-anchor", "end")
+        .attr("text-anchor", "middle")
         .attr("font-weight", "bold")
-        .attr("x", -35)
+        .attr("x", 0 - (nutritions[yLabel].length * 3))
         .attr("y", margin.top-5)
         .text(nutritions[yLabel])
         .attr("text-anchor", "start");
@@ -189,7 +188,11 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         d3.selectAll(d.incoming.map(([d]) => d.text)).attr("font-weight", "bold").attr("font-size", 25);
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", colorout).raise();
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", "bold").attr("font-size", 25);
-        
+        if(d.data["name"] == "Ramen")
+        {
+            xlabel = 3;
+            console.log("xLabel change to 3");
+        }
         // Lighten up each item's ingredients' dots
         d3.selectAll(d.outgoing.map(([, d]) => d.dot))
             .attr("r", dotSize * 4)
