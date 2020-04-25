@@ -22,7 +22,7 @@ var radius = width / 2
 var margin = {left: -bar_width/2, right: 50, top: -bar_width/2, bottom:0};
 var plotshift = bar_width / 2
 var plotDataSet = [];
-var dotSize = 4;
+var dotSize = 3;
 
 var ingredient_type = ["meat", "dairy", "fruit", "vegetable", "legumes", "grain", "sause", "other"];
                 //  0           1       2               3           4
