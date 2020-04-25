@@ -67,13 +67,14 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     var tickNumber = 2;
     // Add X axis
     svg.append("g")
-        .attr("class", "axis")
+        .attr("class", "x-axis")
         .attr("stroke-width", "2")
         .attr("transform", "translate("+ margin.left +"," + (margin.top + plotshift) + ")")
         .call(d3.axisBottom(x).ticks(tickNumber));
 
     // Add X axis label
     svg.append("text")
+        .attr("class", "x-label")
         .attr("text-anchor", "start")
         .attr("font-weight", "bold")
         .attr("x", -margin.left + (nutritions[xLabel].length) )
@@ -82,7 +83,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     
     // Add Y axis
     svg.append("g")
-        .attr("class", "axis")
+        .attr("class", "y-axis")
         .attr("stroke-width", "2")
         .attr("transform", "translate("+ (margin.left + plotshift) +"," + margin.top + ")")
         .call(d3.axisLeft(y).ticks(tickNumber));
@@ -90,11 +91,11 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     // Add Y axis label
     svg.append("text")
         .attr("text-anchor", "middle")
+        .attr("class", "y-label")
         .attr("font-weight", "bold")
-        .attr("x", 0 - (nutritions[yLabel].length * 3))
+        .attr("x", 0)
         .attr("y", margin.top-5)
-        .text(nutritions[yLabel])
-        .attr("text-anchor", "start");
+        .text(nutritions[yLabel]);
    
     // Add dots for scatter plots
     svg.append('g')
@@ -188,10 +189,18 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         d3.selectAll(d.incoming.map(([d]) => d.text)).attr("font-weight", "bold").attr("font-size", 25);
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", colorout).raise();
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", "bold").attr("font-size", 25);
+        // we can turn this into button
         if(d.data["name"] == "Ramen")
         {
-            xlabel = 3;
-            console.log("xLabel change to 3");
+            yLabel = 3;
+            xLabel = 2;
+            updatePlot();
+        }
+        if(d.data["name"] == "Pizze-Cheese")
+        {
+            yLabel = 0;
+            xLabel = 1;
+            updatePlot();
         }
         // Lighten up each item's ingredients' dots
         d3.selectAll(d.outgoing.map(([, d]) => d.dot))
@@ -211,6 +220,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
      //   d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
      //   d3.selectAll(d.outgoing.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
         d3.selectAll(d.outgoing.map(([, d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
+        
     }
         
     // Function that reads data and build hierarchy relationships
@@ -302,5 +312,48 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         }
         return cal;
     }
+    function updatePlot()
+    { 
+        var x = d3.scaleLinear()
+        .domain([0, d3.max(plotDataSet, function(d) { return d[xLabel]; })])
+      //  .ticks(2)
+        .range([0, bar_width]);
+    var y = d3.scaleLinear()
+        .domain([0, d3.max(plotDataSet, function(d) { return d[yLabel]; })])
+        .range([bar_width, 0]);
+    var tickNumber = 2;
+
+
+        svg.select(".x-axis")
+        .attr("stroke-width", "2")
+        .attr("transform", "translate("+ margin.left +"," + (margin.top + plotshift) + ")")
+        .call(d3.axisBottom(x).ticks(tickNumber));
+
+    // Add X axis label
+    svg.select(".x-label")
+        .text(nutritions[xLabel]);
+    
+    // Add Y axis
+    svg.select(".y-axis")
+        .attr("stroke-width", "2")
+        .attr("transform", "translate("+ (margin.left + plotshift) +"," + margin.top + ")")
+        .call(d3.axisLeft(y).ticks(tickNumber));
+
+    // Add Y axis label;
+    svg.select(".y-label")
+        .text(nutritions[yLabel]);
+   
+    // Add dots for scatter plots
+    svg.selectAll("dot")
+        .data(root.children) // Only displays dot for ingredients
+        .enter()
+        .append("circle")
+        .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
+        .attr("cx", function (d) { return x(d.data[nutritions[xLabel]]);}) // x-axis value
+        .attr("cy", function (d) { return y(caloriesFix(d.data[nutritions[yLabel]])); }) // y -axis value
+        .attr("r", dotSize)
+        .style("fill", colornone)
+        .each(function(d){d.dot = this;}) 
+    } 
 });
 
