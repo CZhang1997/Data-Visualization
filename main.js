@@ -22,14 +22,14 @@ var radius = width / 2
 var margin = {left: -bar_width/2, right: 50, top: -bar_width/2, bottom:0};
 var plotshift = bar_width / 2
 var plotDataSet = [];
-var dotSize = 2;
+var dotSize = 4;
 
 var ingredient_type = ["meat", "dairy", "fruit", "vegetable", "legumes", "grain", "sause", "other"];
                 //  0           1       2               3           4
 var nutritions = ["calories", "fat", "carbohydrates", "sodium", "portein"];
 // change the index below to change to different comparsion 
 var xLabel = 0;
-var yLabel = 2;
+var yLabel = 1;
 
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
@@ -80,6 +80,13 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("font-weight", "bold")
         .attr("x", -margin.left + (nutritions[xLabel].length) )
         .attr("y", 5 )
+        .on("click", function(){ 
+            xLabel ++;
+            if(xLabel >= nutritions.length)
+            {
+                xLabel = 0;
+            } 
+            updatePlot();})
         .text(toUpper(nutritions[xLabel]));
     
     // Add Y axis
@@ -97,6 +104,13 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("font-weight", "bold")
         .attr("x", 0)
         .attr("y", margin.top-5)
+        .on("click", function(){ 
+            yLabel ++;
+            if(yLabel >= nutritions.length)
+            {
+                yLabel = 0;
+            } 
+            updatePlot();})
         .text(toUpper(nutritions[yLabel]));
 
     
@@ -140,7 +154,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     .append("circle")
     .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
     .attr("cx", function (d) { return x(d.data[nutritions[xLabel]]);}) // x-axis value
-    .attr("cy", function (d) { return y(caloriesFix(d.data[nutritions[yLabel]])); }) // y -axis value
+    .attr("cy", function (d) { return y(d.data[nutritions[yLabel]]); }) // y -axis value
     .attr("r", dotSize)
     .style("fill", colornone)
     .each(function(d){d.dot = this;})
@@ -260,19 +274,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", colorout).raise();
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", "bold").attr("font-size", 25);
         d3.select(d.dot).attr("r", dotSize * 4).style("fill", function(d){ return generateTextColor(d.data.group);});
-        // we can turn this into button
-        if(d.data["name"] == "Ramen")
-        {
-            yLabel = 3;
-            xLabel = 2;
-            updatePlot();
-        }
-        if(d.data["name"] == "Pizze-Cheese")
-        {
-            yLabel = 0;
-            xLabel = 1;
-            updatePlot();
-        }
+
         // Lighten up each item's ingredients' dots
         d3.selectAll(d.outgoing.map(([, d]) => d.dot))
             .attr("r", dotSize * 4)
@@ -309,12 +311,11 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
             map.set(name, data);
             if("fat" in data)   // add data to plot data set
             {
-                var cal = caloriesFix(data["calories"]);
-                var fat = data["fat"];
-                var carb = data["carbohydrates"];
-                var sodium = data["sodium"];
-                var protein = data["protein"];
-
+                var cal = caloriesFix(data[nutritions[0]]);
+                var fat = data[nutritions[1]];
+                var carb = data[nutritions[2]];
+                var sodium = data[nutritions[3]];
+                var protein = data[nutritions[4]];
                 plotDataSet.push([cal, fat, carb, sodium, protein]);
             }
             if (i >= 0) {
@@ -327,7 +328,6 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
               
             return data;
             });
-            
             return root;
     }
         
@@ -396,42 +396,52 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     }
     function updatePlot()
     { 
-        var x = d3.scaleLinear()
-        .domain([0, d3.max(plotDataSet, function(d) { return d[xLabel]; })])
-      //  .ticks(2)
-        .range([0, bar_width]);
-    var y = d3.scaleLinear()
-        .domain([0, d3.max(plotDataSet, function(d) { return d[yLabel]; })])
-        .range([bar_width, 0]);
+        tickNumber = 2;
+        x = d3.scaleLinear()
+            .domain([0, d3.max(plotDataSet, function(d) {  return d[xLabel]; })])
+            .range([0, bar_width]);
+        y = d3.scaleLinear()
+            .domain([0, d3.max(plotDataSet, function(d) { return d[yLabel]; })])
+            .range([bar_width, 0]);
 
-    tickNumber = 2;
-        svg.select(".x-axis")
-        .call(d3.axisBottom(x).ticks(tickNumber));
+            svg.select(".x-axis")
+            .call(d3.axisBottom(x).ticks(tickNumber));
 
-    // Add X axis label
-    svg.select(".x-label")
-        .text(toUpper(nutritions[xLabel]));
+        // Add X axis label
+        svg.select(".x-label")
+            .text(toUpper(nutritions[xLabel]));
+        
+        // Add Y axis
+        svg.select(".y-axis")
+            .call(d3.axisLeft(y).ticks(tickNumber));
+
+        // Add Y axis label;
+        svg.select(".y-label")
+            .text(toUpper(nutritions[yLabel]));
     
-    // Add Y axis
-    svg.select(".y-axis")
-        .call(d3.axisLeft(y).ticks(tickNumber));
-
-    // Add Y axis label;
-    svg.select(".y-label")
-        .text(toUpper(nutritions[yLabel]));
-   
-    // Add dots for scatter plots
-    svg.selectAll("dot")
-        .data(root.children) // Only displays dot for ingredients
-        .enter()
-        .append("circle")
-        .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
-        .attr("cx", function (d) { return x(d.data[nutritions[xLabel]]);}) // x-axis value
-        .attr("cy", function (d) { return y(caloriesFix(d.data[nutritions[yLabel]])); }) // y -axis value
-        .attr("r", dotSize)
-        .style("fill", colornone)
-        .each(function(d){d.dot = this;}) 
+        // Add dots for scatter plots
+        //  console.log(root);
+        
+        // root.children.forEach(node => updateDot(node));
+    
+        var i;
+        for(i = 0; i < root.children.length; i++)
+        {
+            var node = root.children[i];
+            d3.select(node.dot)
+            .attr("cy", function (node) { 
+            //    console.log(node.data[nutritions[yLabel]]); 
+                return y(node.data[nutritions[yLabel]]); }) // y -axis value
+            .attr("cx", function (node) { 
+            //    console.log(x(node.data[nutritions[xLabel]]));
+                return x(node.data[nutritions[xLabel]]);}) // x-axis value
+            .attr("r", dotSize)
+            .style("fill", colornone);
+            // console.log(nutritions[yLabel]);
+        }
     }
+
+
     function toUpper(data)
     {
         var upper = data.toUpperCase();
