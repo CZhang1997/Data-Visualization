@@ -70,9 +70,10 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
 
     // Add X axis label
     svg.append("text")
+        .attr("font-family", "monospace")
         .attr("text-anchor", "end")
         .attr("font-weight", "bold")
-        .attr("x", -margin.left+25 )
+        .attr("x", -margin.left+30 )
         .attr("y", 5 )
         .text("FAT");
     
@@ -85,13 +86,53 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     
     // Add Y axis label
     svg.append("text")
+        .attr("font-family", "monospace")
         .attr("text-anchor", "end")
         .attr("font-weight", "bold")
         .attr("x", -35)
         .attr("y", margin.top-5)
         .text("CALORIES")
         .attr("text-anchor", "start");
-   
+
+    // Define pie, arc functions and data for pie chart whihc color the 4 quadrants
+     const pie = d3.pie()
+        .sort(null)
+        .value(d => d.value);
+    const arcPath = d3.arc()
+        .outerRadius(boxWidth / 4)
+        .innerRadius(0);
+    const angles = [
+        {name: 'first', value: 100, text: ''},
+        {name: 'second', value: 100, text: ''},
+        {name: 'third', value: 100, text: ''},
+        {name: 'fourth', value: 100, text: ''}];
+
+    // (Pie Chart) Add color for the 4 quadrants
+    svg.append("g")
+        .attr("stroke", "white")
+        .style("stroke-width", "17px")
+        .style("opacity", 0.15)
+        .selectAll("pie-region")
+        .data(pie(angles))
+        .attr("class", 'arc')
+        .join("path")
+        .attr("fill", function(d){ return generateQuadrantColor(d.data.name); }) // Text Color
+        .attr("d", arcPath)
+        .append("title");
+    // (Pie Chart) Add text for the 4 quadrants
+    svg.append("g")
+        .attr("font-family", "Brush Script MT")
+        .attr("font-size", 20)
+        .attr("text-anchor", "middle")
+        .selectAll("text-region")
+        .data(pie(angles))
+        .join("text")
+        .attr("transform", d => `translate(${arcPath.centroid(d)})`)
+        .call(text => text.append("tspan")
+        .attr("y", "-0.4em")
+        .attr("fill-opacity", 0.5)
+        .text(d => d.data.text))
+
     // Add dots for scatter plots
     svg.append('g')
         .selectAll("dot")
@@ -144,12 +185,11 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("fill", function(d){ return generateTextColor(d.data.group); }) // Text Color
         .each(function(d){d.node_dot = this;})
 
-
-
     // Link that connects nodes with each other
     const link = svg.append("g")
         .attr("stroke", colornone)
         .attr("fill", "none")
+        .style("opacity", 0.7)
         .selectAll("path")
         .data(root.leaves().flatMap(leaf => leaf.outgoing))
         .join("path")
@@ -158,7 +198,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .each(function(d) { d.path = this; });
     
     // Legend
- //   /*
+    /*
     Reference: https://www.d3-graph-gallery.com/graph/bubble_template.html
     var width3 = width2 - 100
     svg.append("g").selectAll("myrect")
@@ -170,12 +210,9 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("r", 10)
         .style("fill", "red") // function(d){ return myColor(d)})
         .on("mouseover", highlight)
-        .on("mouseleave", noHighlight);
-    //    */
-    
+        .on("mouseleave", noHighlight); 
+        */
 
-
-    
     // Mouse is on the node    
     function overed(d) {
         link.style("mix-blend-mode", null);
@@ -267,6 +304,16 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         typeColorMap.set('TYPE', '#616A6B');
 
         return typeColorMap.get(type);
+    }
+
+     // Function to generate a color for each quadrant
+     function generateQuadrantColor(quadrant) {
+        let typeColorMap = new Map();
+        typeColorMap.set('first', '#FF00A6');
+        typeColorMap.set('second', '#007EFF');
+        typeColorMap.set('third', '#30FF00');
+        typeColorMap.set('fourth', '#FF9A00');
+        return typeColorMap.get(quadrant);
     }
 
     // display information when mouse hover the name
