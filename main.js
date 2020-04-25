@@ -13,6 +13,8 @@ var colornone = "#ccc"
 var height = window.screen.height - 100
 var width = height //window.screen.height - 200
 
+// add more number to reduce the size of the circle
+var boxWidth = width + 200
                 // minus value to change the length of the axis
 var bar_width = height - 400 //600
 var radius = width / 2
@@ -23,6 +25,11 @@ var plotDataSet = [];
 var dotSize = 2;
 
 var ingredient_type = ["meat", "dairy", "fruit", "vegetable", "legumes", "grain", "sause", "other"];
+                //  0           1       2               3           4
+var nutritions = ["calories", "fat", "carbohydrates", "sodium", "portein"];
+// change the index below to change to different comparsion 
+var xLabel = 0;
+var yLabel = 1;
 
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
@@ -41,8 +48,6 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     const root = tree(bilink(d3.hierarchy(data)
         .sort((a, b) => d3.ascending(a.height, b.height) || d3.ascending(a.data.name, b.data.name))));
 
-    // add more number to reduce the size of the circle
-    var boxWidth = width + 200
     
     const svg = d3.select("body").append("svg")
       .attr("width", width + 100)
@@ -53,11 +58,11 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     
     // Set up domain&range for xy axis
     var x = d3.scaleLinear()
-        .domain([0, d3.max(plotDataSet, function(d) { return d[0]; })])
+        .domain([0, d3.max(plotDataSet, function(d) { return d[xLabel]; })])
       //  .ticks(2)
         .range([0, bar_width]);
     var y = d3.scaleLinear()
-        .domain([0, d3.max(plotDataSet, function(d) { return d[1]; })])
+        .domain([0, d3.max(plotDataSet, function(d) { return d[yLabel]; })])
 
         .range([bar_width, 0]);
     var tickNumber = 2;
@@ -70,11 +75,11 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
 
     // Add X axis label
     svg.append("text")
-        .attr("text-anchor", "end")
+        .attr("text-anchor", "start")
         .attr("font-weight", "bold")
-        .attr("x", -margin.left+25 )
+        .attr("x", -margin.left + (nutritions[xLabel].length) )
         .attr("y", 5 )
-        .text("FAT");
+        .text(nutritions[xLabel]);
     
     // Add Y axis
     svg.append("g")
@@ -89,7 +94,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("font-weight", "bold")
         .attr("x", -35)
         .attr("y", margin.top-5)
-        .text("CALORIES")
+        .text(nutritions[yLabel])
         .attr("text-anchor", "start");
    
     // Add dots for scatter plots
@@ -99,8 +104,8 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .enter()
         .append("circle")
         .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
-        .attr("cx", function (d) { return x(d.data["fat"]);}) // x-axis value
-        .attr("cy", function (d) { return y(caloriesFix(d.data["calories"])); }) // y -axis value
+        .attr("cx", function (d) { return x(d.data[nutritions[xLabel]]);}) // x-axis value
+        .attr("cy", function (d) { return y(caloriesFix(d.data[nutritions[yLabel]])); }) // y -axis value
         .attr("r", dotSize)
         .style("fill", colornone)
         .each(function(d){d.dot = this;})
@@ -158,7 +163,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .each(function(d) { d.path = this; });
     
     // Legend
- //   /*
+    /*
     Reference: https://www.d3-graph-gallery.com/graph/bubble_template.html
     var width3 = width2 - 100
     svg.append("g").selectAll("myrect")
@@ -171,7 +176,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .style("fill", "red") // function(d){ return myColor(d)})
         .on("mouseover", highlight)
         .on("mouseleave", noHighlight);
-    //    */
+        */
     
 
 
@@ -221,8 +226,11 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
             {
                 var fat = data["fat"];
                 var cal = caloriesFix(data["calories"]);
-                
-                plotDataSet.push([fat, cal]);
+                var carb = data["carbohydrates"];
+                var sodium = data["sodium"];
+                var protein = data["protein"];
+
+                plotDataSet.push([cal, fat, carb, sodium, protein]);
             }
             if (i >= 0) {
                 find({name: name.substring(0, i), children: []}).children.push(data);
