@@ -13,6 +13,8 @@ var colornone = "#ccc"
 var height = window.screen.height - 100
 var width = height //window.screen.height - 200
 
+// add more number to reduce the size of the circle
+var boxWidth = width + 200
                 // minus value to change the length of the axis
 var bar_width = height - 400 //600
 var radius = width / 2
@@ -23,6 +25,11 @@ var plotDataSet = [];
 var dotSize = 2;
 
 var ingredient_type = ["meat", "dairy", "fruit", "vegetable", "legumes", "grain", "sause", "other"];
+                //  0           1       2               3           4
+var nutritions = ["calories", "fat", "carbohydrates", "sodium", "portein"];
+// change the index below to change to different comparsion 
+var xLabel = 0;
+var yLabel = 2;
 
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
@@ -41,8 +48,6 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     const root = tree(bilink(d3.hierarchy(data)
         .sort((a, b) => d3.ascending(a.height, b.height) || d3.ascending(a.data.name, b.data.name))));
 
-    // add more number to reduce the size of the circle
-    var boxWidth = width + 200
     
     const svg = d3.select("body").append("svg")
       .attr("width", width + 100)
@@ -53,33 +58,34 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     
     // Set up domain&range for xy axis
     var x = d3.scaleLinear()
-        .domain([0, d3.max(plotDataSet, function(d) { return d[0]; })])
+        .domain([0, d3.max(plotDataSet, function(d) { return d[xLabel]; })])
       //  .ticks(2)
         .range([0, bar_width]);
     var y = d3.scaleLinear()
-        .domain([0, d3.max(plotDataSet, function(d) { return d[1]; })])
-
+        .domain([0, d3.max(plotDataSet, function(d) { return d[yLabel]; })])
         .range([bar_width, 0]);
     var tickNumber = 2;
     // Add X axis
     svg.append("g")
-        .attr("class", "axis")
+        .attr("class", "x-axis")
         .attr("stroke-width", "2")
         .attr("transform", "translate("+ margin.left +"," + (margin.top + plotshift) + ")")
         .call(d3.axisBottom(x).ticks(tickNumber));
 
     // Add X axis label
     svg.append("text")
+
+        .attr("class", "x-label")
         .attr("font-family", "monospace")
-        .attr("text-anchor", "end")
+        .attr("text-anchor", "start")
         .attr("font-weight", "bold")
-        .attr("x", -margin.left+30 )
+        .attr("x", -margin.left + (nutritions[xLabel].length) )
         .attr("y", 5 )
-        .text("FAT");
+        .text(toUpper(nutritions[xLabel]));
     
     // Add Y axis
     svg.append("g")
-        .attr("class", "axis")
+        .attr("class", "y-axis")
         .attr("stroke-width", "2")
         .attr("transform", "translate("+ (margin.left + plotshift) +"," + margin.top + ")")
         .call(d3.axisLeft(y).ticks(tickNumber));
@@ -87,13 +93,13 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     // Add Y axis label
     svg.append("text")
         .attr("font-family", "monospace")
-        .attr("text-anchor", "end")
+        .attr("text-anchor", "middle")
+        .attr("class", "y-label")
         .attr("font-weight", "bold")
-        .attr("x", -35)
+        .attr("x", 0)
         .attr("y", margin.top-5)
-        .text("CALORIES")
-        .attr("text-anchor", "start");
-
+        .text(toUpper(nutritions[yLabel]));
+  
     // Define pie, arc functions and data for pie chart whihc color the 4 quadrants
      const pie = d3.pie()
         .sort(null)
@@ -132,7 +138,6 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("y", "-0.4em")
         .attr("fill-opacity", 0.5)
         .text(d => d.data.text))
-
     // Add dots for scatter plots
     svg.append('g')
         .selectAll("dot")
@@ -140,8 +145,8 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .enter()
         .append("circle")
         .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
-        .attr("cx", function (d) { return x(d.data["fat"]);}) // x-axis value
-        .attr("cy", function (d) { return y(caloriesFix(d.data["calories"])); }) // y -axis value
+        .attr("cx", function (d) { return x(d.data[nutritions[xLabel]]);}) // x-axis value
+        .attr("cy", function (d) { return y(caloriesFix(d.data[nutritions[yLabel]])); }) // y -axis value
         .attr("r", dotSize)
         .style("fill", colornone)
         .each(function(d){d.dot = this;})
@@ -210,7 +215,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("r", 10)
         .style("fill", "red") // function(d){ return myColor(d)})
         .on("mouseover", highlight)
-        .on("mouseleave", noHighlight); 
+        .on("mouseleave", noHighlight);
         */
 
     // Mouse is on the node    
@@ -221,7 +226,20 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         d3.selectAll(d.incoming.map(([d]) => d.text)).attr("font-weight", "bold").attr("font-size", 25);
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", colorout).raise();
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", "bold").attr("font-size", 25);
-        
+        d3.select(d.dot).attr("r", dotSize * 4).style("fill", function(d){ return generateTextColor(d.data.group);});
+        // we can turn this into button
+        if(d.data["name"] == "Ramen")
+        {
+            yLabel = 3;
+            xLabel = 2;
+            updatePlot();
+        }
+        if(d.data["name"] == "Pizze-Cheese")
+        {
+            yLabel = 0;
+            xLabel = 1;
+            updatePlot();
+        }
         // Lighten up each item's ingredients' dots
         d3.selectAll(d.outgoing.map(([, d]) => d.dot))
             .attr("r", dotSize * 4)
@@ -237,9 +255,11 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", null);
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", null).attr("font-size", 15);
         d3.select(d.dot).attr("r", dotSize).style("fill", colornone);
+       // d3.select(d.dot).attr("r", dotSize).style("fill", function(d){ return generateTextColor(d.data.group);});
      //   d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
      //   d3.selectAll(d.outgoing.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
         d3.selectAll(d.outgoing.map(([, d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
+        
     }
         
     // Function that reads data and build hierarchy relationships
@@ -256,10 +276,13 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
             map.set(name, data);
             if("fat" in data)   // add data to plot data set
             {
-                var fat = data["fat"];
                 var cal = caloriesFix(data["calories"]);
-                
-                plotDataSet.push([fat, cal]);
+                var fat = data["fat"];
+                var carb = data["carbohydrates"];
+                var sodium = data["sodium"];
+                var protein = data["protein"];
+
+                plotDataSet.push([cal, fat, carb, sodium, protein]);
             }
             if (i >= 0) {
                 find({name: name.substring(0, i), children: []}).children.push(data);
@@ -337,6 +360,49 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
             cal = 200;
         }
         return cal;
+    }
+    function updatePlot()
+    { 
+        var x = d3.scaleLinear()
+        .domain([0, d3.max(plotDataSet, function(d) { return d[xLabel]; })])
+      //  .ticks(2)
+        .range([0, bar_width]);
+    var y = d3.scaleLinear()
+        .domain([0, d3.max(plotDataSet, function(d) { return d[yLabel]; })])
+        .range([bar_width, 0]);
+
+    tickNumber = 2;
+        svg.select(".x-axis")
+        .call(d3.axisBottom(x).ticks(tickNumber));
+
+    // Add X axis label
+    svg.select(".x-label")
+        .text(toUpper(nutritions[xLabel]));
+    
+    // Add Y axis
+    svg.select(".y-axis")
+        .call(d3.axisLeft(y).ticks(tickNumber));
+
+    // Add Y axis label;
+    svg.select(".y-label")
+        .text(toUpper(nutritions[yLabel]));
+   
+    // Add dots for scatter plots
+    svg.selectAll("dot")
+        .data(root.children) // Only displays dot for ingredients
+        .enter()
+        .append("circle")
+        .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
+        .attr("cx", function (d) { return x(d.data[nutritions[xLabel]]);}) // x-axis value
+        .attr("cy", function (d) { return y(caloriesFix(d.data[nutritions[yLabel]])); }) // y -axis value
+        .attr("r", dotSize)
+        .style("fill", colornone)
+        .each(function(d){d.dot = this;}) 
+    }
+    function toUpper(data)
+    {
+        var upper = data.toUpperCase();
+        return upper;
     }
 });
 
