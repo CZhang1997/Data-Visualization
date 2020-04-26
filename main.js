@@ -224,16 +224,16 @@ const node_dot = svg.append('g')
     .attr("cy", function (d) { return y(fixYaxis(d.data[nutritions[yLabel]])); }) // y -axis value
     .attr("r", dotSize)
     .style("fill", colornone)
-    .style("opacity", .5)
+    .style("opacity", .7)
     .each(function(d){d.dot = this;})
   
     
     // Link that connects nodes with each other
     const link = svg.append("g")
         .attr("stroke", colornone)
-        .style('stroke-width', 0.2)
+        .style('stroke-width', 0.3)
         .attr("fill", "none")
-        .style("opacity", 0.7)
+        .style("opacity", 1)
         .selectAll("path")
         .data(root.leaves().flatMap(leaf => leaf.outgoing))
         .join("path")
@@ -283,11 +283,11 @@ const node_dot = svg.append('g')
         d3.selectAll(d.incoming.map(([d]) => d.text)).attr("font-weight", null).attr("font-size", 15);
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", null).style('stroke-width', 0.2);
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", null).attr("font-size", 15);
-        d3.select(d.dot).attr("r", dotSize).style("opacity", .5).style("fill", colornone);
+        d3.select(d.dot).attr("r", dotSize).style("opacity", .7).style("fill", colornone);
        // d3.select(d.dot).attr("r", dotSize).style("fill", function(d){ return generateTextColor(d.data.group);});
      //   d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
      //   d3.selectAll(d.outgoing.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
-        d3.selectAll(d.outgoing.map(([, d]) => d.dot)).attr("r", dotSize).style("opacity", .5).style("fill", colornone);
+        d3.selectAll(d.outgoing.map(([, d]) => d.dot)).attr("r", dotSize).style("opacity", .7).style("fill", colornone);
         
     }
         
@@ -494,7 +494,7 @@ const node_dot = svg.append('g')
             .attr("cx", function (node) { 
                 return x(fixXaxis(node.data[nutritions[xLabel]]));}) // x-axis value
             .attr("r", dotSize)
-            .style("opacity", .5)
+            .style("opacity", .7)
             .style("fill", colornone);
         }
     }
