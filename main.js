@@ -4,7 +4,7 @@
 */
 const contents = d3.select("#contents");
 
-
+// Define colors
 var colorin = "#00f"
 var colorout = "#f00"
 var colornone = "#ccc"
@@ -25,11 +25,12 @@ var plotDataSet = [];
 var dotSize = 3;
 
 var ingredient_type = ["meat", "dairy", "fruit", "vegetable", "legumes", "grain", "sause", "other"];
+
                 //  0           1       2               3           4
 var nutritions = ["calories", "fat", "carbohydrates", "sodium", "portein"];
 // change the index below to change to different comparsion 
-var xLabel = 0;
-var yLabel = 1;
+var xLabel = 1;
+var yLabel = 2;
 
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
@@ -58,8 +59,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     
     // Set up domain&range for xy axis
     var x = d3.scaleLinear()
-        .domain([0, d3.max(plotDataSet, function(d) { return d[xLabel]; })])
-      //  .ticks(2)
+        .domain([0, d3.max(plotDataSet, function(d) { return d[xLabel]; })])//  .ticks(2)
         .range([0, bar_width]);
     var y = d3.scaleLinear()
         .domain([0, d3.max(plotDataSet, function(d) { return d[yLabel]; })])
@@ -157,6 +157,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     .attr("cy", function (d) { return y(d.data[nutritions[yLabel]]); }) // y -axis value
     .attr("r", dotSize)
     .style("fill", colornone)
+    .style("opacity", .5)
     .each(function(d){d.dot = this;})
   
     // Define pie, arc functions and data for pie chart whihc color the 4 quadrants
@@ -164,7 +165,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .sort(null)
         .value(d => d.value);
     const arcPath = d3.arc()
-        .outerRadius(boxWidth / 4)
+        .outerRadius(boxWidth * 0.29)
         .innerRadius(0);
     const angles = [
         {name: 'first', value: 100, text: ''},
@@ -227,19 +228,20 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
                 ${d.incoming.length} incoming*/
 
     // Add dots for each ingredient
-    svg.append('g')
+    const node_dot = svg.append('g')
         .selectAll("node_dot")
         .data(root.leaves())
         .enter()
         .append("circle")
         .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`)        
-        .attr("r", 5)
+        .attr("r", 3)
         .attr("fill", function(d){ return generateTextColor(d.data.group); }) // Text Color
         .each(function(d){d.node_dot = this;})
 
     // Link that connects nodes with each other
     const link = svg.append("g")
         .attr("stroke", colornone)
+        .style('stroke-width', 0.2)
         .attr("fill", "none")
         .style("opacity", 0.7)
         .selectAll("path")
@@ -268,32 +270,34 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     // Mouse is on the node    
     function overed(d) {
         link.style("mix-blend-mode", null);
-        d3.select(this).attr("font-weight", "bold");
-        d3.selectAll(d.incoming.map(d => d.path)).attr("stroke", colorin).raise();
-        d3.selectAll(d.incoming.map(([d]) => d.text)).attr("font-weight", "bold").attr("font-size", 25);
-        d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", colorout).raise();
-        d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", "bold").attr("font-size", 25);
-        d3.select(d.dot).attr("r", dotSize * 4).style("fill", function(d){ return generateTextColor(d.data.group);});
-
+        node.style("opacity", .15);
+        d3.select(this).attr("font-weight", "bold").attr("font-size", 18).style("opacity", 1);
+        d3.selectAll(d.incoming.map(d => d.path)).attr("stroke", colorin).style('stroke-width', 2).raise();
+        d3.selectAll(d.incoming.map(([d]) => d.text)).attr("font-weight", "bold").attr("font-size", 22).style("opacity", 1);
+        d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", colorout).style('stroke-width', 2).raise();
+        d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", "bold").attr("font-size", 22).style("opacity", 1);
+        d3.select(d.dot).attr("r", dotSize * 3).style("opacity", 1).style("fill", function(d){ return generateTextColor(d.data.group);});
         // Lighten up each item's ingredients' dots
         d3.selectAll(d.outgoing.map(([, d]) => d.dot))
-            .attr("r", dotSize * 4)
+            .attr("r", dotSize * 3)
+            .style("opacity", 1)
             .style("fill", function(d){ return generateTextColor(d.data.group);});
     }
 
     // Mouse is off the node
     function outed(d) {
         link.style("mix-blend-mode", "multiply");
-        d3.select(this).attr("font-weight", null);
-        d3.selectAll(d.incoming.map(d => d.path)).attr("stroke", null);
+        d3.select(this).attr("font-weight", null).attr("font-size", 15);
+        node.style("opacity", 1);
+        d3.selectAll(d.incoming.map(d => d.path)).attr("stroke", null).style('stroke-width', 0.2);
         d3.selectAll(d.incoming.map(([d]) => d.text)).attr("font-weight", null).attr("font-size", 15);
-        d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", null);
+        d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", null).style('stroke-width', 0.2);
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", null).attr("font-size", 15);
-        d3.select(d.dot).attr("r", dotSize).style("fill", colornone);
+        d3.select(d.dot).attr("r", dotSize).style("opacity", .5).style("fill", colornone);
        // d3.select(d.dot).attr("r", dotSize).style("fill", function(d){ return generateTextColor(d.data.group);});
      //   d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
      //   d3.selectAll(d.outgoing.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
-        d3.selectAll(d.outgoing.map(([, d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
+        d3.selectAll(d.outgoing.map(([, d]) => d.dot)).attr("r", dotSize).style("opacity", .5).style("fill", colornone);
         
     }
         
@@ -350,10 +354,10 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         let typeColorMap = new Map();
         typeColorMap.set('meat', '#3352FF');
         typeColorMap.set('dairy', '#DD33FF');
-        typeColorMap.set('fruit', '#ACFF33');
+        typeColorMap.set('fruit', '#D35400');
         typeColorMap.set('vegetable', '#106F1C');
-        typeColorMap.set('legumes', '#00FF00');
-        typeColorMap.set('grain', '#EAD11A');
+        typeColorMap.set('legumes', '#02DE22');
+        typeColorMap.set('grain', '#808000');
         typeColorMap.set('sause', '#A52A2A');
         typeColorMap.set('other', '#935116');
         typeColorMap.set('ITEM', '#000000');
@@ -372,7 +376,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         return typeColorMap.get(quadrant);
     }
 
-    // display information when mouse hover the name
+    // Function to display information when mouse hover the name
     function getInfo(d)
     {   // can change base on different value
         if(d.data["group"] == "ITEM" || d.data["group"] == "TYPE")
@@ -386,6 +390,8 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         sodium(mg): ${d.data["sodium"]}
         portein(g): ${d.data["portein"]}`;
     }
+    
+    // Function to adjust calories over 200
     function caloriesFix(cal)
     {
         if(parseFloat(cal) > 200)
@@ -394,6 +400,8 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         }
         return cal;
     }
+
+    // Function to update the plot
     function updatePlot()
     { 
         tickNumber = 2;
@@ -436,12 +444,13 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
             //    console.log(x(node.data[nutritions[xLabel]]));
                 return x(node.data[nutritions[xLabel]]);}) // x-axis value
             .attr("r", dotSize)
+            .style("opacity", .5)
             .style("fill", colornone);
             // console.log(nutritions[yLabel]);
         }
     }
 
-
+    // Function to convert text to upper case
     function toUpper(data)
     {
         var upper = data.toUpperCase();
