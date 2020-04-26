@@ -90,6 +90,46 @@
         "imports": []
     },
     {
+        "name": "ingredient.bratwurst",
+        "group": "meat",
+        "calories": 283,
+        "fat": 25,
+        "carbohydrates": 2,
+        "sodium": 719,
+        "portein": 12,
+        "imports": []
+    },
+    {
+        "name": "ingredient.pepperoni",
+        "group": "meat",
+        "calories": 140,
+        "fat": 13,
+        "carbohydrates": 0,
+        "sodium": 500,
+        "portein": 6,
+        "imports": []
+    },
+    {
+        "name": "ingredient.sausage-Italian",
+        "group": "meat",
+        "calories": 391,
+        "fat": 35,
+        "carbohydrates": 0.7,
+        "sodium": 826,
+        "portein": 16,
+        "imports": []
+    },
+    {
+        "name": "ingredient.ham",
+        "group": "meat",
+        "calories": 46,
+        "fat": 2,
+        "carbohydrates": 1,
+        "sodium": 365,
+        "portein": 5,
+        "imports": []
+    },
+    {
         "name": "ingredient.egg",
         "group": "meat",
         "calories": 100,
@@ -161,7 +201,58 @@
         "portein": 1.2,
         "imports": []
     }, 
+    {
+        "name": "ingredient.mushroom",
+        "group": "vegetable",
+        "calories": 35,
+        "fat": 0,
+        "carbohydrates": 7,
+        "sodium": 18,
+        "portein": 3,
+        "imports": []
+    },
+    {
+        "name": "ingredient.bell pepper-green",
+        "group": "vegetable",
+        "calories": 20,
+        "fat": 0,
+        "carbohydrates": 4,
+        "sodium": 5,
+        "portein": 1,
+        "imports": []
+    },
+    {
+        "name":  "ingredient.onion-red",
+        "group": "vegetable",
+        "calories": 40,
+        "fat": 0.1,
+        "carbohydrates": 9.3,
+        "sodium": 4,
+        "portein": 1.1,
+        "imports": []
+    },
+    {
+        "name":  "ingredient.romanie lettuce",
+        "group": "vegetable",
+        "calories": 17,
+        "fat": 0,
+        "carbohydrates": 3,
+        "sodium": 8,
+        "portein": 1,
+        "imports": []
+    },
 
+
+    {
+        "name": "ingredient.pineapple",
+        "group": "fruit",
+        "calories": 452,
+        "fat": 1,
+        "carbohydrates": 119,
+        "sodium": 9,
+        "portein": 5,
+        "imports": []
+    },
 
 
     {
@@ -214,6 +305,16 @@
         "fat": 1.5,
         "carbohydrates": 26,
         "sodium": 240,
+        "portein": 4,
+        "imports": []
+    },
+    {
+        "name": "ingredient.hot dog bun-white",
+        "group": "grain",
+        "calories": 100,
+        "fat": 1,
+        "carbohydrates": 18,
+        "sodium": 180,
         "portein": 4,
         "imports": []
     },
@@ -363,7 +464,36 @@
         "portein": 0,
         "imports": []
     },
-
+    {
+        "name": "ingredient.ketchup",
+        "group": "sause",
+        "calories": 10,
+        "fat": 0,
+        "carbohydrates": 2,
+        "sodium": 82,
+        "portein": 0,
+        "imports": []
+    },
+    {
+        "name": "ingredient.mustard",
+        "group": "sause",
+        "calories": 3,
+        "fat": 0,
+        "carbohydrates": 0,
+        "sodium": 57,
+        "portein": 0,
+        "imports": []
+    },
+    {
+        "name": "ingredient.salad dressing-caesar",
+        "group": "sause",
+        "calories": 60,
+        "fat": 3,
+        "carbohydrates": 3,
+        "sodium": 250,
+        "portein": 4,
+        "imports": []
+    },
 
     {
         "name": "ingredient.vegetable oil",
@@ -400,6 +530,25 @@
             "ingredient.potato"
         ]
     },
+    {
+        "name": "ingredient.item.Hot Dog",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.bratwurst",
+            "ingredient.hot dog bun-white",
+            "ingredient.ketchup",
+            "ingredient.mustard"
+        ]
+    },
+    {
+        "name": "ingredient.item.Fried Chicken Wing",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.flour",
+            "ingredient.chicken-wing"
+        ]
+    },
+    
 
     {
         "name": "ingredient.item.Fried Rice",
@@ -424,13 +573,48 @@
         ]
     },
 
+
     {
-        "name": "ingredient.item.Pizze-Cheese",
+        "name": "ingredient.item.Pizza-Cheese",
         "group": "ITEM",
         "imports": [
             "ingredient.pizza crust",
             "ingredient.cheese-Mozzarella",
             "ingredient.tomato paste"
+        ]
+    },
+    {
+        "name": "ingredient.item.Pizza-Pepperoni",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.pizza crust",
+            "ingredient.cheese-Mozzarella",
+            "ingredient.tomato paste",
+            "ingredient.pepperoni"
+        ]
+    },
+    {
+        "name": "ingredient.item.Pizza-Supreme",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.pizza crust",
+            "ingredient.cheese-Mozzarella",
+            "ingredient.tomato paste",
+            "ingredient.sausage-Italian",
+            "ingredient.mushroom",
+            "ingredient.bell pepper-green",
+            "ingredient.onion-red"
+        ]
+    },
+    {
+        "name": "ingredient.item.Pizza-Hawaiian",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.pizza crust",
+            "ingredient.cheese-Mozzarella",
+            "ingredient.tomato paste",
+            "ingredient.ham",
+            "ingredient.pineapple"
         ]
     },
     {
@@ -443,6 +627,16 @@
             "ingredient.spaghetti"
         ]
     },
+    {
+        "name": "ingredient.item.Caesar Salad",
+        "group": "ITEM",
+        "imports": [
+            "ingredient.romanie lettuce",
+            "ingredient.salad dressing-caesar"
+        ]
+    },
+
+
     {
         "name": "ingredient.item.Ramen",
         "group": "ITEM",
@@ -507,7 +701,9 @@
         "group": "TYPE",
         "imports": [
             "ingredient.item.Hamburger-Big Mac",
-            "ingredient.item.French Fries"
+            "ingredient.item.French Fries",
+            "ingredient.item.Hot Dog",
+            "ingredient.item.Fried Chicken Wing"
         ]
     },
 
@@ -524,8 +720,12 @@
         "name": "ingredient.item.type.ITALIAN FOOD",
         "group": "TYPE",
         "imports": [
-            "ingredient.item.Pizze-Cheese",
-            "ingredient.item.Spaghetti-Bolognese"
+            "ingredient.item.Pizza-Cheese",
+            "ingredient.item.Pizza-Pepperoni",
+            "ingredient.item.Pizza-Supreme",
+            "ingredient.item.Pizza-Hawaiian",
+            "ingredient.item.Spaghetti-Bolognese",
+            "ingredient.item.Caesar Salad"
         ]
     },
 
