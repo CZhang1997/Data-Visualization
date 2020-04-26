@@ -2,6 +2,10 @@
 /*
 @reference: https://observablehq.com/@d3/hierarchical-edge-bundling
 */
+/**
+ * @author: Xizhen Yang, Churong Zhang
+ * @date:   4/26/2020
+ */
 const contents = d3.select("#contents");
 
 // Define colors
@@ -15,7 +19,6 @@ var width = height //window.screen.height - 200
 
 // add more number to reduce the size of the circle
 var boxWidth = width + 200
-// boxWidth = boxWidth + boxWidth / 2;
                 // minus value to change the length of the axis
 var bar_width = height - 400 //600
 var radius = width / 2
@@ -33,7 +36,7 @@ var nutr_aver = []; // use to save the average of all nutrition data
 // change the index below to change to different comparsion 
 var xLabel = 0;
 var yLabel = 2;
-var tickNumber = 0;
+var tickNumber = 1;
 
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
@@ -42,17 +45,13 @@ line = d3.lineRadial()
 tree = d3.cluster()
     .size([2 * Math.PI, radius - 100])
   
-
 // Read data from json file
 d3.json("data/data.json").then(function(da) { // this cover all code below
-//});
-
     data = hierarchy(da)
     // Setting up data for each node
     const root = tree(bilink(d3.hierarchy(data)
         .sort((a, b) => d3.ascending(a.height, b.height) || d3.ascending(a.data.name, b.data.name))));
 
-    
     const svg = d3.select("#contents").append("svg")
       .attr("width", width + 100)
       .attr("height", height)
@@ -115,15 +114,10 @@ const node = svg.append("g")
     .attr("fill", function(d){ return generateTextColor(d.data.group); }) // Text Color
     .each(function(d) { d.text = this; })
     .on("mouseover", overed)
-    //.on("mouseover", function(d){ return overed_dot(root.children[root.children.length - 1]) })
-    //.on("mouseover", overed_dot(d => root.children[root.children.length - 1]))
     .on("mouseout", outed)
     .call(text => text.append("title") // Display a text box for nutrition facts
         .text(d => getInfo(d))
-        ); /*
-            ${id(d)}
-            ${d.outgoing.length} outgoing
-            ${d.incoming.length} incoming*/
+        ); 
 
 // Add dots for each ingredient
 const node_dot = svg.append('g')
@@ -136,12 +130,9 @@ const node_dot = svg.append('g')
     .attr("fill", function(d){ return generateTextColor(d.data.group); }) // Text Color
     .each(function(d){d.node_dot = this;})
 
-    
-    // Set up domain&range for xy axis
+    // Set up domain&range for xy axis for the scatter plot
     var x = d3.scaleLinear()
         .domain([0, d3.max(plotDataSet, function(d) { return d[xLabel]; })])
-        // .domain([0, d3.max(plotDataSet, function(d) { console.log(d); return d[xLabel]; })])
-       // .domain([0, 2 * nutr_aver[xLabel]])
         .range([0, bar_width]);
     var y = d3.scaleLinear()
         .domain([0, d3.max(plotDataSet, function(d) { return d[yLabel]; })])
@@ -198,21 +189,6 @@ const node_dot = svg.append('g')
             updatePlot();})
         .text(toUpper(nutritions[yLabel]));
 
-    
-    var y_selector = d3.select("#contents").append("select")
-    y_selector.selectAll('myOptions')    
-        .attr("id", "y_selector")
-        .data(nutritions).enter()
-        .append("option")
-        .text(function(d) {return d;})
-        .attr("value", function(d) {return d;})
-
-    y_selector.on("change", function(d) {
-        // recover the option that has been chosen
-        var selectedOption = d3.select(this).property("value");
-        console.log(selectedOption);
-        })
-  
     // Add dots for scatter plots
     svg.append('g')
     .selectAll("dot")
@@ -240,22 +216,6 @@ const node_dot = svg.append('g')
         .style("mix-blend-mode", "multiply")
         .attr("d", ([i, o]) => line(i.path(o)))
         .each(function(d) { d.path = this; });
-    
-    // Legend
-    /*
-    Reference: https://www.d3-graph-gallery.com/graph/bubble_template.html
-    var width3 = width2 - 100
-    svg.append("g").selectAll("myrect")
-        .data(ingredient_type)
-        .enter()
-        .append("circle")
-        .attr("cx", 100)
-        .attr("cy", function(d,i){ return 10 + i*(20+5)}) // 100 is where the first dot appears. 25 is the distance between dots
-        .attr("r", 10)
-        .style("fill", "red") // function(d){ return myColor(d)})
-        .on("mouseover", highlight)
-        .on("mouseleave", noHighlight);
-        */
 
     // Mouse is on the node    
     function overed(d) {
@@ -284,9 +244,6 @@ const node_dot = svg.append('g')
         d3.selectAll(d.outgoing.map(d => d.path)).attr("stroke", null).style('stroke-width', 0.2);
         d3.selectAll(d.outgoing.map(([, d]) => d.text)).attr("font-weight", null).attr("font-size", 15);
         d3.select(d.dot).attr("r", dotSize).style("opacity", .7).style("fill", colornone);
-       // d3.select(d.dot).attr("r", dotSize).style("fill", function(d){ return generateTextColor(d.data.group);});
-     //   d3.selectAll(d.incoming.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
-     //   d3.selectAll(d.outgoing.map(([d]) => d.dot)).attr("r", dotSize).style("fill", colornone);
         d3.selectAll(d.outgoing.map(([, d]) => d.dot)).attr("r", dotSize).style("opacity", .7).style("fill", colornone);
         
     }
@@ -498,7 +455,6 @@ const node_dot = svg.append('g')
             .style("fill", colornone);
         }
     }
-
     // Function to convert text to upper case
     function toUpper(data)
     {
