@@ -15,6 +15,7 @@ var width = height //window.screen.height - 200
 
 // add more number to reduce the size of the circle
 var boxWidth = width + 200
+// boxWidth = boxWidth + boxWidth / 2;
                 // minus value to change the length of the axis
 var bar_width = height - 400 //600
 var radius = width / 2
@@ -28,9 +29,11 @@ var ingredient_type = ["meat", "dairy", "fruit", "vegetable", "legumes", "grain"
 
                 //  0           1       2               3           4
 var nutritions = ["calories", "fat", "carbohydrates", "sodium", "portein"];
+var nutr_aver = []; // use to save the average of all nutrition data
 // change the index below to change to different comparsion 
-var xLabel = 1;
+var xLabel = 0;
 var yLabel = 2;
+var tickNumber = 0;
 
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
@@ -55,16 +58,94 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
       .attr("height", height)
       .attr("viewBox", [-boxWidth / 2, -boxWidth / 2 , boxWidth, boxWidth]);
 
-    
+    // Define pie, arc functions and data for pie chart whihc color the 4 quadrants
+    const pie = d3.pie()
+    .sort(null)
+    .value(d => d.value);
+const arcPath = d3.arc()
+    .outerRadius(boxWidth * 0.29)
+    .innerRadius(0);
+const angles = [
+    {name: 'first', value: 100, text: ''},
+    {name: 'second', value: 100, text: ''},
+    {name: 'third', value: 100, text: ''},
+    {name: 'fourth', value: 100, text: ''}];
+
+// (Pie Chart) Add color for the 4 quadrants
+svg.append("g")
+    .attr("stroke", "white")
+    .style("stroke-width", "17px")
+    .style("opacity", 0.15)
+    .selectAll("pie-region")
+    .data(pie(angles))
+    .attr("class", 'arc')
+    .join("path")
+    .attr("fill", function(d){ return generateQuadrantColor(d.data.name); }) // Text Color
+    .attr("d", arcPath)
+    .append("title");
+// (Pie Chart) Add text for the 4 quadrants
+svg.append("g")
+    .attr("font-family", "Brush Script MT")
+    .attr("font-size", 20)
+    .attr("text-anchor", "middle")
+    .selectAll("text-region")
+    .data(pie(angles))
+    .join("text")
+    .attr("transform", d => `translate(${arcPath.centroid(d)})`)
+    .call(text => text.append("tspan")
+    .attr("y", "-0.4em")
+    .attr("fill-opacity", 0.5)
+    .text(d => d.data.text))
+
+// Node
+const node = svg.append("g")
+    .attr("font-family", "monospace")
+    .attr("font-size", 15)
+    .attr("font-weight", "bold")
+    .selectAll("g")
+    .data(root.leaves())
+    .join("g")
+    .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`)
+    .append("text")
+    .attr("dy", "0.31em")
+    .attr("x", d => d.x < Math.PI ? 6 : -6)
+    .attr("text-anchor", d => d.x < Math.PI ? "start" : "end") // Display position
+    .attr("transform", d => d.x >= Math.PI ? "rotate(180)" : null) // Display location
+    .text(d => d.data.name) // Text
+    .attr("fill", function(d){ return generateTextColor(d.data.group); }) // Text Color
+    .each(function(d) { d.text = this; })
+    .on("mouseover", overed)
+    //.on("mouseover", function(d){ return overed_dot(root.children[root.children.length - 1]) })
+    //.on("mouseover", overed_dot(d => root.children[root.children.length - 1]))
+    .on("mouseout", outed)
+    .call(text => text.append("title") // Display a text box for nutrition facts
+        .text(d => getInfo(d))
+        ); /*
+            ${id(d)}
+            ${d.outgoing.length} outgoing
+            ${d.incoming.length} incoming*/
+
+// Add dots for each ingredient
+const node_dot = svg.append('g')
+    .selectAll("node_dot")
+    .data(root.leaves())
+    .enter()
+    .append("circle")
+    .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`)        
+    .attr("r", 3)
+    .attr("fill", function(d){ return generateTextColor(d.data.group); }) // Text Color
+    .each(function(d){d.node_dot = this;})
+
     
     // Set up domain&range for xy axis
     var x = d3.scaleLinear()
-        .domain([0, d3.max(plotDataSet, function(d) { return d[xLabel]; })])//  .ticks(2)
+        .domain([0, d3.max(plotDataSet, function(d) { return d[xLabel]; })])
+        // .domain([0, d3.max(plotDataSet, function(d) { console.log(d); return d[xLabel]; })])
+       // .domain([0, 2 * nutr_aver[xLabel]])
         .range([0, bar_width]);
     var y = d3.scaleLinear()
         .domain([0, d3.max(plotDataSet, function(d) { return d[yLabel]; })])
         .range([bar_width, 0]);
-    var tickNumber = 2;
     // Add X axis
     svg.append("g")
         .attr("class", "x-axis")
@@ -82,10 +163,12 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("y", 5 )
         .on("click", function(){ 
             xLabel ++;
-            if(xLabel >= nutritions.length)
+            xLabel %= nutritions.length;
+            if(yLabel == xLabel)
             {
-                xLabel = 0;
-            } 
+                xLabel ++;
+                xLabel %= nutritions.length;
+            }
             updatePlot();})
         .text(toUpper(nutritions[xLabel]));
     
@@ -106,10 +189,12 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         .attr("y", margin.top-5)
         .on("click", function(){ 
             yLabel ++;
-            if(yLabel >= nutritions.length)
+            yLabel %= nutritions.length;
+            if(yLabel == xLabel)
             {
-                yLabel = 0;
-            } 
+                yLabel ++;
+                yLabel %= nutritions.length;
+            }
             updatePlot();})
         .text(toUpper(nutritions[yLabel]));
 
@@ -127,25 +212,7 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         var selectedOption = d3.select(this).property("value");
         console.log(selectedOption);
         })
-    // var yaxis_dropdown = d3.select("#contents").insert("select", "svg")
-    //     .attr("width","50")
-    //     .attr("height","50")
-    //     .attr("x", "100")
-    //     .attr("y", "100")
-    //     .attr("id", "yaxis_select")
-    //     .on("change", yaxis_dropdown_change);
-    // var yaxis_dropdown_change = function()
-    // {
-    //     console.log(d3.select(this).property('value'));
-    // }
-    // yaxis_dropdown.selectAll("option")
-    //     .data(nutritions)
-    //     .enter().append("option")
-    //     .attr("value", function (d) { return d; })
-    //     .text(function (d) {
-    //     return d[0].toUpperCase() + d.slice(1,d.length); // capitalize 1st letter
-    //     });
-
+  
     // Add dots for scatter plots
     svg.append('g')
     .selectAll("dot")
@@ -153,91 +220,14 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     .enter()
     .append("circle")
     .attr("transform", "translate("+ margin.left +"," + margin.top + ")")
-    .attr("cx", function (d) { return x(d.data[nutritions[xLabel]]);}) // x-axis value
-    .attr("cy", function (d) { return y(d.data[nutritions[yLabel]]); }) // y -axis value
+    .attr("cx", function (d) { return x(fixXaxis(d.data[nutritions[xLabel]]));}) // x-axis value
+    .attr("cy", function (d) { return y(fixYaxis(d.data[nutritions[yLabel]])); }) // y -axis value
     .attr("r", dotSize)
     .style("fill", colornone)
     .style("opacity", .5)
     .each(function(d){d.dot = this;})
   
-    // Define pie, arc functions and data for pie chart whihc color the 4 quadrants
-     const pie = d3.pie()
-        .sort(null)
-        .value(d => d.value);
-    const arcPath = d3.arc()
-        .outerRadius(boxWidth * 0.29)
-        .innerRadius(0);
-    const angles = [
-        {name: 'first', value: 100, text: ''},
-        {name: 'second', value: 100, text: ''},
-        {name: 'third', value: 100, text: ''},
-        {name: 'fourth', value: 100, text: ''}];
-
-    // (Pie Chart) Add color for the 4 quadrants
-    svg.append("g")
-        .attr("stroke", "white")
-        .style("stroke-width", "17px")
-        .style("opacity", 0.15)
-        .selectAll("pie-region")
-        .data(pie(angles))
-        .attr("class", 'arc')
-        .join("path")
-        .attr("fill", function(d){ return generateQuadrantColor(d.data.name); }) // Text Color
-        .attr("d", arcPath)
-        .append("title");
-    // (Pie Chart) Add text for the 4 quadrants
-    svg.append("g")
-        .attr("font-family", "Brush Script MT")
-        .attr("font-size", 20)
-        .attr("text-anchor", "middle")
-        .selectAll("text-region")
-        .data(pie(angles))
-        .join("text")
-        .attr("transform", d => `translate(${arcPath.centroid(d)})`)
-        .call(text => text.append("tspan")
-        .attr("y", "-0.4em")
-        .attr("fill-opacity", 0.5)
-        .text(d => d.data.text))
-
-    // Node
-    const node = svg.append("g")
-        .attr("font-family", "monospace")
-        .attr("font-size", 15)
-        .attr("font-weight", "bold")
-        .selectAll("g")
-        .data(root.leaves())
-        .join("g")
-        .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`)
-        .append("text")
-        .attr("dy", "0.31em")
-        .attr("x", d => d.x < Math.PI ? 6 : -6)
-        .attr("text-anchor", d => d.x < Math.PI ? "start" : "end") // Display position
-        .attr("transform", d => d.x >= Math.PI ? "rotate(180)" : null) // Display location
-        .text(d => d.data.name) // Text
-        .attr("fill", function(d){ return generateTextColor(d.data.group); }) // Text Color
-        .each(function(d) { d.text = this; })
-        .on("mouseover", overed)
-        //.on("mouseover", function(d){ return overed_dot(root.children[root.children.length - 1]) })
-        //.on("mouseover", overed_dot(d => root.children[root.children.length - 1]))
-        .on("mouseout", outed)
-        .call(text => text.append("title") // Display a text box for nutrition facts
-            .text(d => getInfo(d))
-            ); /*
-                ${id(d)}
-                ${d.outgoing.length} outgoing
-                ${d.incoming.length} incoming*/
-
-    // Add dots for each ingredient
-    const node_dot = svg.append('g')
-        .selectAll("node_dot")
-        .data(root.leaves())
-        .enter()
-        .append("circle")
-        .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`)        
-        .attr("r", 3)
-        .attr("fill", function(d){ return generateTextColor(d.data.group); }) // Text Color
-        .each(function(d){d.node_dot = this;})
-
+    
     // Link that connects nodes with each other
     const link = svg.append("g")
         .attr("stroke", colornone)
@@ -305,7 +295,13 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
     function hierarchy(data, delimiter = ".") {
         let root;
         const map = new Map;
-            
+        // define var to store the sum of various variable
+        var count = 0;
+        var calSum = 0;
+        var fatSum = 0;
+        var carbSum = 0;
+        var sodSum = 0;
+        var proteinSum = 0;
         data.forEach(function find(data) {
             const {name} = data;
               
@@ -315,12 +311,19 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
             map.set(name, data);
             if("fat" in data)   // add data to plot data set
             {
-                var cal = caloriesFix(data[nutritions[0]]);
+                var cal = data[nutritions[0]];
                 var fat = data[nutritions[1]];
                 var carb = data[nutritions[2]];
                 var sodium = data[nutritions[3]];
                 var protein = data[nutritions[4]];
                 plotDataSet.push([cal, fat, carb, sodium, protein]);
+                // accumulate them
+                count ++;
+                calSum += cal;
+                fatSum += fat;
+                carbSum += carb;
+                sodSum += sodium;
+                proteinSum += protein;
             }
             if (i >= 0) {
                 find({name: name.substring(0, i), children: []}).children.push(data);
@@ -329,9 +332,16 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
             else {
                 root = data;
             }
-              
             return data;
             });
+            // calculate the average and push into nutr_aver
+            nutr_aver.push(calSum / count);
+            nutr_aver.push(fatSum / count);
+            nutr_aver.push(carbSum / count);
+            nutr_aver.push(sodSum / count);
+            nutr_aver.push(proteinSum / count);
+            // change data that is 2 time its average
+            fixData();
             return root;
     }
         
@@ -390,21 +400,67 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
         sodium(mg): ${d.data["sodium"]}
         portein(g): ${d.data["portein"]}`;
     }
-    
-    // Function to adjust calories over 200
-    function caloriesFix(cal)
+    function fixData()
     {
-        if(parseFloat(cal) > 200)
-        {
-            cal = 200;
+        // make very data point not too high
+        var i;
+        for(i = 0; i < plotDataSet.length; i++)
+        {       // car
+            if(plotDataSet[i][0] > nutr_aver[0] * 2)
+            {
+                plotDataSet[i][0] = nutr_aver[0] * 2;
+            }
+                // fat
+            if(plotDataSet[i][1] > nutr_aver[1] * 2)
+            {
+                plotDataSet[i][1] = nutr_aver[1] * 2;
+            }
+                // carb
+            if(plotDataSet[i][2] > nutr_aver[2] * 2)
+            {
+                plotDataSet[i][2] = nutr_aver[2] * 2;
+            }
+                // sodium
+            if(plotDataSet[i][3] > nutr_aver[3] * 2)
+            {
+                plotDataSet[i][3] = nutr_aver[3] * 2;
+            }  
+                // protein
+            if(plotDataSet[i][4] > nutr_aver[4] * 2)
+            {
+                plotDataSet[i][4] = nutr_aver[4] * 2;
+            }
         }
-        return cal;
     }
-
+    // Function to adjust calories over 200
+    function fixXaxis(xVal)
+    {   // if xVal is greater than the twice of its averge, then lower it
+        if(xVal > nutr_aver[xLabel] * 2)
+        {
+            xVal = nutr_aver[xLabel] * 1.8;
+        }   // if too small
+        else if(xVal < nutr_aver[xLabel] * 0.2)
+        {
+            xVal = nutr_aver[xLabel] * 0.3;
+        }
+        return xVal;
+    }
+    function fixYaxis(yVal)
+    {
+        // if yVal is greater than the twice of its averge, then lower it
+        if(yVal > nutr_aver[yLabel] * 2)
+        {
+            yVal = nutr_aver[yLabel] * 1.8;
+        }   // if too small
+        else if(yVal < nutr_aver[yLabel] * 0.2)
+        {
+            yVal = nutr_aver[yLabel] * 0.3;
+        }
+        return yVal;
+    }
     // Function to update the plot
     function updatePlot()
     { 
-        tickNumber = 2;
         x = d3.scaleLinear()
             .domain([0, d3.max(plotDataSet, function(d) {  return d[xLabel]; })])
             .range([0, bar_width]);
@@ -428,25 +484,18 @@ d3.json("data/data.json").then(function(da) { // this cover all code below
             .text(toUpper(nutritions[yLabel]));
     
         // Add dots for scatter plots
-        //  console.log(root);
-        
-        // root.children.forEach(node => updateDot(node));
-    
         var i;
         for(i = 0; i < root.children.length; i++)
         {
             var node = root.children[i];
             d3.select(node.dot)
             .attr("cy", function (node) { 
-            //    console.log(node.data[nutritions[yLabel]]); 
-                return y(node.data[nutritions[yLabel]]); }) // y -axis value
+                return y(fixYaxis(node.data[nutritions[yLabel]])); }) // y -axis value
             .attr("cx", function (node) { 
-            //    console.log(x(node.data[nutritions[xLabel]]));
-                return x(node.data[nutritions[xLabel]]);}) // x-axis value
+                return x(fixXaxis(node.data[nutritions[xLabel]]));}) // x-axis value
             .attr("r", dotSize)
             .style("opacity", .5)
             .style("fill", colornone);
-            // console.log(nutritions[yLabel]);
         }
     }
 
