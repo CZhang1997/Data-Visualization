@@ -36,7 +36,7 @@ var nutr_aver = []; // use to save the average of all nutrition data
 // change the index below to change to different comparsion 
 var xLabel = 0;
 var yLabel = 2;
-var tickNumber = 0;
+var tickNumber = 1;
 
 line = d3.lineRadial()
     .curve(d3.curveBundle.beta(0.85))
