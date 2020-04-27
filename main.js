@@ -35,7 +35,7 @@ var nutritions = ["calories", "fat", "carbohydrates", "sodium", "portein"];
 var nutr_aver = []; // use to save the average of all nutrition data
 // change the index below to change to different comparsion 
 var xLabel = 0;
-var yLabel = 2;
+var yLabel = 1;
 var tickNumber = 1;
 
 line = d3.lineRadial()
